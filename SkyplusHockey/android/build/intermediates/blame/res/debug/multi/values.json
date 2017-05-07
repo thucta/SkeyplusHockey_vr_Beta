@@ -1,0 +1,113 @@
+[
+    {
+        "outputFile": "E:\\AndroidStudioProject\\SkyplusHockey.git\\trunk\\SkyplusHockey\\android\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 2,
+                    "startColumn": 4,
+                    "startOffset": 55,
+                    "endColumn": 50,
+                    "endOffset": 101
+                },
+                "from": {
+                    "file": "E:\\AndroidStudioProject\\SkyplusHockey.git\\trunk\\SkyplusHockey\\android\\res\\values\\strings.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 3,
+                    "startColumn": 4,
+                    "startOffset": 106,
+                    "endColumn": 41,
+                    "endOffset": 143
+                },
+                "from": {
+                    "file": "E:\\AndroidStudioProject\\SkyplusHockey.git\\trunk\\SkyplusHockey\\android\\res\\values\\strings.xml",
+                    "position": {
+                        "startLine": 8,
+                        "startColumn": 4,
+                        "startOffset": 314,
+                        "endColumn": 41,
+                        "endOffset": 351
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 148,
+                    "endColumn": 49,
+                    "endOffset": 193
+                },
+                "from": {
+                    "file": "E:\\AndroidStudioProject\\SkyplusHockey.git\\trunk\\SkyplusHockey\\android\\res\\values\\strings.xml",
+                    "position": {
+                        "startLine": 6,
+                        "startColumn": 4,
+                        "startOffset": 230,
+                        "endColumn": 49,
+                        "endOffset": 275
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 5,
+                    "startColumn": 4,
+                    "startOffset": 198,
+                    "endColumn": 33,
+                    "endOffset": 227
+                },
+                "from": {
+                    "file": "E:\\AndroidStudioProject\\SkyplusHockey.git\\trunk\\SkyplusHockey\\android\\res\\values\\strings.xml",
+                    "position": {
+                        "startLine": 7,
+                        "startColumn": 4,
+                        "startOffset": 280,
+                        "endColumn": 33,
+                        "endOffset": 309
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 6,
+                    "startColumn": 4,
+                    "startOffset": 232,
+                    "endColumn": 63,
+                    "endOffset": 291
+                },
+                "from": {
+                    "file": "E:\\AndroidStudioProject\\SkyplusHockey.git\\trunk\\SkyplusHockey\\android\\res\\values\\strings.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 7,
+                    "startColumn": 4,
+                    "startOffset": 296,
+                    "endColumn": 58,
+                    "endOffset": 350
+                },
+                "from": {
+                    "file": "E:\\AndroidStudioProject\\SkyplusHockey.git\\trunk\\SkyplusHockey\\android\\res\\values\\strings.xml"
+                }
+            },
+            {
+                "to": {
+                    "startLine": 8,
+                    "startColumn": 4,
+                    "startOffset": 355,
+                    "endLine": 15,
+                    "endColumn": 12,
+                    "endOffset": 813
+                },
+                "from": {
+                    "file": "E:\\AndroidStudioProject\\SkyplusHockey.git\\trunk\\SkyplusHockey\\android\\res\\values\\styles.xml"
+                }
+            }
+        ]
+    }
+]

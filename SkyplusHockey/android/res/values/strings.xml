@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SkyplusHockey</string>
+    <string name="title_activity_loading">Loading</string>
+    <string name="title_activity_input_text">InputText</string>
+    <string name="enter_name">Enter name</string>
+    <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
+</resources>
