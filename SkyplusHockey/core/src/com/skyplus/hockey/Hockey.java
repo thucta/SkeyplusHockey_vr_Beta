@@ -5,8 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.skyplus.hockey.objects.DeviceAPI;
+import com.skyplus.hockey.objects.HockeyPreferences;
 import com.skyplus.hockey.state.GameStateManager;
 import com.skyplus.hockey.state.MenuState;
 
@@ -25,7 +25,9 @@ public class Hockey extends Game {
 	private GameStateManager gms;
 	public static boolean flagCheck = false;
 	public static Sound sound;
-	public static  DeviceAPI deviceAPI;
+	public static DeviceAPI deviceAPI;
+
+	private HockeyPreferences pref =new HockeyPreferences();
 
 	public Hockey(DeviceAPI deviceAPI){
 		this.deviceAPI = deviceAPI;
@@ -46,7 +48,15 @@ public class Hockey extends Game {
 		// dua vao kich thuoc mang hinh set duong dan den thu muc hinh anh phu hop
 		PATCH=WITDH+"x"+HEIGHT+"/";
 
+
 		Gdx.gl.glClearColor(1, 0, 0, 1);
+		Hockey.sound = Gdx.audio.newSound(Gdx.files.internal("silence.mp3"));
+
+		if(pref.getMusic()){
+			Hockey.sound.stop();
+			Hockey.sound.play();
+			Hockey.sound.loop();
+		}
 		gms.push(new MenuState(gms));
 	}
 

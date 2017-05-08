@@ -24,7 +24,7 @@ public class Pandle extends GameObject {
     private Circle bounds;
 
     public int score = 0;
-
+private  Audio audio;
 
     /*
       Các biến di chuyển
@@ -53,6 +53,7 @@ public class Pandle extends GameObject {
 
         SPEED_WIDTH *= (Hockey.WITDH/Config.SCREEN_MAIN.x); // toc do cua pandle thay doi tren tung loai device, dua tren toc do chuan
         SPEED_HEIGHT *= (Hockey.HEIGHT/Config.SCREEN_MAIN.y);
+        audio = new Audio();
     }
 
     @Override
@@ -145,7 +146,7 @@ public class Pandle extends GameObject {
         if (Intersector.overlaps(puck.getBounds(), getBounds())) {
             body.setTexture(body_light);
             timer = System.currentTimeMillis();
-            puck.getPandleHit().play();
+            audio.getPandleHit().play();
             return true;
         } else if (System.currentTimeMillis() - timer > 100) {
             body.setTexture(body_dark);

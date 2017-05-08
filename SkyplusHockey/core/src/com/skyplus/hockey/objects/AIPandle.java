@@ -32,7 +32,7 @@ public class AIPandle extends Pandle {
      Các biến di chuyển
    */
     public static double SPEED_WIDTH = 50000;
-    public static double SPEED_HIEGHT = 50000;
+    public static double SPEED_HIEGHT = 70000;
     public static float elapsed = 0.0001f;
     private Boolean moving = false;
     private Vector2 end = new Vector2(0, 0);
@@ -86,7 +86,7 @@ public class AIPandle extends Pandle {
 
     @Override
     public void move(float x, float y) {
-        if (y <= Hockey.HEIGHT / 2+getWitdh()) {
+        if (y <= Hockey.HEIGHT / 2+getWitdh()/2) {
 
             x = (int) Math.min(Math.max(x, getWitdh() / 2 + background.getMapEdge().get(Config.EDGE_RIGHT_TOP).getWitdh() - 1),
                     Hockey.WITDH - getWitdh() / 2 - (background.getMapEdge().get(Config.EDGE_LEFT_TOP).getWitdh() - 1));
@@ -185,7 +185,7 @@ public class AIPandle extends Pandle {
             timer = System.currentTimeMillis();
             if(velocitytemp.x<4)
             {
-                Vector2 vector2 = new Vector2(5,20);
+                Vector2 vector2 = new Vector2(2,20);
                 setVelocitytemp(vector2);
                 setVelocity();
             }

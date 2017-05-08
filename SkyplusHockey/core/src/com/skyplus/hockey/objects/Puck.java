@@ -3,6 +3,7 @@ package com.skyplus.hockey.objects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
@@ -25,9 +26,8 @@ public class Puck extends GameObject {
     private Vector2d velocity;
     private Circle bounds;
 
-    private Sound edgeHitSound;
+    private Audio audio;
 
-    private Sound pandleHit;
     private Map<String,BackgroundGame.Edge> listEdge;
 
     private int radius;
@@ -38,7 +38,7 @@ public class Puck extends GameObject {
     private static float RATE_WIDTH ;
     private static float RATE_HIEGHT ;
 
-
+    private ParticleEffect effectEdge;
 
 
     public Puck(int x, int y, Map<String,BackgroundGame.Edge> listEdge) {
@@ -57,11 +57,13 @@ public class Puck extends GameObject {
         bounds = new Circle(position.x, position.y, body.getWidth() / 2);
         radius = (int) (body.getWidth() / 2);
 
-        RATE_WIDTH = (Hockey.WITDH/Config.SCREEN_MAIN.x);
-        RATE_HIEGHT = (Hockey.HEIGHT/Config.SCREEN_MAIN.y);
+        RATE_WIDTH = (Hockey.WITDH/ Config.SCREEN_MAIN.x);
+        RATE_HIEGHT = (Hockey.HEIGHT/ Config.SCREEN_MAIN.y);
 
-        edgeHitSound = Gdx.audio.newSound(Gdx.files.internal("EdgeHit.ogg"));
-        pandleHit = Gdx.audio.newSound(Gdx.files.internal("PlayerHit.ogg"));
+       audio = new Audio();
+
+        Effect fx  = new Effect("fxgreenEdge");
+        effectEdge = fx.create();
     }
 
     public void setPosition(Vector2 position) {
@@ -111,6 +113,23 @@ public class Puck extends GameObject {
 
     }
 
+    public boolean histEdge(){
+
+        if (Intersector.overlaps(getBounds(), listEdge.get(Config.EDGE_RIGHT_TOP).getBound())) {
+            Gdx.app.log("dsad","2");
+            return true;
+        }
+        Gdx.app.log("dsad","4");
+
+//        for (String key : listEdge.keySet()){
+//            if(Intersector.overlaps(getBounds(),listEdge.get(key).getBound())){
+//
+//
+//            }
+//        }
+
+        return false;
+    }
 
     // update trang thai cho opuck bao gom vi tri, body,...
 
@@ -134,16 +153,25 @@ public class Puck extends GameObject {
             edge = listEdge.get(Config.EDGE_RIGHT_TOP);
             velocity.x = Math.abs(velocity.x) + F_EDGE;
             position.x = radius + edge.getWitdh();
+
+
+            effectEdge.setPosition(body.getX(), body.getY());
+            effectEdge.reset();
+
             edge.setBody_light();
-            edgeHitSound.play();
+            audio.getEdgeHitSound().play();
         }
 
         else if  (Intersector.overlaps(getBounds(),listEdge.get(Config.EDGE_RIGHT_BOTTOM).getBound())){
             edge = listEdge.get(Config.EDGE_RIGHT_BOTTOM);
             velocity.x = Math.abs(velocity.x) + F_EDGE;
             position.x = radius + edge.getWitdh();
+
+            effectEdge.setPosition(body.getX(), body.getY());
+            effectEdge.reset();
+
             edge.setBody_light();
-            edgeHitSound.play();
+            audio.getEdgeHitSound().play();
         }
 
         // va cham voi canh trai
@@ -151,16 +179,24 @@ public class Puck extends GameObject {
             edge = listEdge.get(Config.EDGE_LEFT_TOP);
             velocity.x = -(Math.abs(velocity.x)+F_EDGE);
             position.x = Hockey.WITDH - radius -edge.getWitdh() ;
+
+            effectEdge.setPosition(body.getX(), body.getY());
+            effectEdge.reset();
+
             edge.setBody_light();
-            edgeHitSound.play();
+            audio.getEdgeHitSound().play();
         }
 
         else if(Intersector.overlaps(getBounds(),listEdge.get(Config.EDGE_LEFT_BOTTOM).getBound())){
             edge = listEdge.get(Config.EDGE_LEFT_BOTTOM);
             velocity.x = -(Math.abs(velocity.x)+F_EDGE);
             position.x = Hockey.WITDH - radius - edge.getWitdh() ;
+
+            effectEdge.setPosition(body.getX(), body.getY());
+            effectEdge.reset();
+
             edge.setBody_light();
-            edgeHitSound.play();
+            audio.getEdgeHitSound().play();
         }
 
 
@@ -178,8 +214,12 @@ public class Puck extends GameObject {
 
 
             }
+
+            effectEdge.setPosition(body.getX(), body.getY());
+            effectEdge.reset();
+
             edge.setBody_light();
-            edgeHitSound.play();
+            audio.getEdgeHitSound().play();
 
         }
         else if(Intersector.overlaps(getBounds(),listEdge.get(Config.EDGE_TOP_LEFT).getBound())){
@@ -193,8 +233,12 @@ public class Puck extends GameObject {
                 velocity.y = Math.abs(velocity.y);
 
             }
+
+            effectEdge.setPosition(body.getX(), body.getY());
+            effectEdge.reset();
+
             edge.setBody_light();
-            edgeHitSound.play();
+            audio.getEdgeHitSound().play();
         }
 
         // va cham voi bottom
@@ -207,8 +251,12 @@ public class Puck extends GameObject {
                 velocity.y = -(Math.abs(velocity.y) + F_EDGE);
                 position.y = Hockey.HEIGHT - radius - edge.getHeight();
             }
+
+            effectEdge.setPosition(body.getX(), body.getY());
+            effectEdge.reset();
+
             edge.setBody_light();
-            edgeHitSound.play();
+            audio.getEdgeHitSound().play();
         }
         else if ( Intersector.overlaps(getBounds(),listEdge.get(Config.EDGE_BOTTOM_LEFT).getBound())) {
             edge = listEdge.get(Config.EDGE_BOTTOM_LEFT);
@@ -221,10 +269,17 @@ public class Puck extends GameObject {
                 position.y = Hockey.HEIGHT - radius - edge.getHeight();
 
             }
-            edge.setBody_light();
-            edgeHitSound.play();
-        }
 
+            effectEdge.setPosition(body.getX(), body.getY());
+            effectEdge.reset();
+
+            edge.setBody_light();
+            audio.getEdgeHitSound().play();
+        }
+        effectEdge.update(delta);
+    }
+    public void drawEffect(SpriteBatch batch){
+        effectEdge.draw(batch);
     }
 
     public void update(float x,float y, float velocityX,float velocityY){
@@ -272,13 +327,9 @@ public class Puck extends GameObject {
     public Texture getTexture() {
         return body.getTexture();
     }
-    public Sound getPandleHit() {
-        return pandleHit;
-    }
 
-    public void setPandleHit(Sound pandleHit) {
-        this.pandleHit = pandleHit;
-    }
+
+
     public void setVelocity(float x ,float y) {
         this.velocity.y =y;
         this.velocity.x = x;

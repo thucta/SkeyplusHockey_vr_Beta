@@ -5,11 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
 import com.skyplus.hockey.Hockey;
 
 /**
@@ -19,19 +17,21 @@ public class WinState extends State implements Screen{
 
 
     private Texture bg;
-    private Sprite button_Again, button_NewGame;
+    private Sprite button_Again, button_NewGame, button_Result;
 
 
 
 
-    public WinState(GameStateManager gsm) {
+    public WinState(GameStateManager gsm, String kq) {
         super(gsm);
         Gdx.app.log("here","WinState");
         bg = new Texture(Hockey.PATCH+"backGame.png");
         button_Again = new Sprite(new Texture(Hockey.PATCH+"buttonAgain.png"));
         button_NewGame = new Sprite(new Texture(Hockey.PATCH+"buttonNewGame.png"));
-        button_Again.setPosition(Hockey.WITDH/2-button_Again.getWidth()/2,Hockey.HEIGHT/2-button_Again.getHeight()/2);
-        button_NewGame.setPosition(Hockey.WITDH/2-button_NewGame.getWidth()/2,Hockey.HEIGHT/2+button_NewGame.getHeight()*2);
+        button_Result = new Sprite(new Texture(Hockey.PATCH +kq+".png"));
+        button_Result.setPosition(Hockey.WITDH/2 - button_Result.getWidth()/2, Hockey.HEIGHT/4- button_Result.getHeight()/2);
+        button_Again.setPosition(Hockey.WITDH/2-button_Again.getWidth()/2, Hockey.HEIGHT/2-button_Again.getHeight()/2);
+        button_NewGame.setPosition(Hockey.WITDH/2-button_NewGame.getWidth()/2, Hockey.HEIGHT*3/4-button_NewGame.getHeight()/2);
 
     }
 
@@ -100,8 +100,11 @@ public class WinState extends State implements Screen{
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         sb.draw(bg,0,0, Hockey.WITDH, Hockey.HEIGHT);
-//        sb.draw(button_PP,cam.viewportWidth/2-button_PP.getWidth()/2,cam.viewportHeight/2-button_PP.getHeight()*3 );
+        button_Result.setFlip(false,true);
+        button_Result.draw(sb);
+        button_Again.setFlip(false,true);
         button_Again.draw(sb);
+        button_NewGame.setFlip(false,true);
         button_NewGame.draw(sb);
 
 

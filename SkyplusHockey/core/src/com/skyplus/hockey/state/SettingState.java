@@ -4,13 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
 import com.skyplus.hockey.Hockey;
+import com.skyplus.hockey.objects.HockeyPreferences;
 
 /**
  * Created by THUC UYEN on 20-Apr-17.
@@ -19,6 +17,7 @@ import com.skyplus.hockey.Hockey;
 public class SettingState extends State implements Screen {
     private Texture bg;
     private Sprite check, uncheck, button_ST, textSound;
+    private HockeyPreferences pref = new HockeyPreferences();
 
     public SettingState(GameStateManager gsm) {
         super(gsm);
@@ -26,13 +25,14 @@ public class SettingState extends State implements Screen {
         bg = new Texture(Hockey.PATCH + "backGame.png");
         check = new Sprite(new Texture(Hockey.PATCH+"check.png"));
         uncheck = new Sprite(new Texture(Hockey.PATCH+"uncheck.png"));
-        check.setPosition(Hockey.WITDH*4/5,Hockey.HEIGHT/2-check.getHeight()/2);
-        uncheck.setPosition(Hockey.WITDH*4/5,Hockey.HEIGHT/2-uncheck.getHeight()/2);
+        check.setPosition(Hockey.WITDH*4/5, Hockey.HEIGHT/3-check.getHeight()/2);
+        uncheck.setPosition(Hockey.WITDH*4/5, Hockey.HEIGHT/3-uncheck.getHeight()/2);
+        textSound = new Sprite(new Texture(Hockey.PATCH+"soundText.png"));
+        textSound.setPosition(Hockey.WITDH/5, Hockey.HEIGHT/3-textSound.getHeight()/2);
         button_ST = new Sprite(new Texture(Hockey.PATCH+"buttonST.png"));
         button_ST.rotate(360);
-        button_ST.setPosition(Hockey.WITDH/2-button_ST.getWidth()/2,Hockey.HEIGHT/2+button_ST.getHeight()*2);
-        textSound = new Sprite(new Texture(Hockey.PATCH+"soundText.png"));
-        textSound.setPosition(Hockey.WITDH/5,Hockey.HEIGHT/2-check.getHeight()/2);
+        button_ST.setPosition(Hockey.WITDH/2-button_ST.getWidth()/2, Hockey.HEIGHT*2/3-button_ST.getHeight()/2);
+
     }
 
     @Override
@@ -58,9 +58,11 @@ public class SettingState extends State implements Screen {
                 if (check.getBoundingRectangle().contains(screenX,screenY)) {
                     if(Hockey.flagCheck) {
                         Hockey.flagCheck = false;
+                        pref.setMusic(false);
                         Hockey.sound.pause();
                     }else {
                         Hockey.flagCheck = true;
+                        pref.setMusic(true);
                         Hockey.sound.play();
                     }
                 }
@@ -105,11 +107,15 @@ public class SettingState extends State implements Screen {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         sb.draw(bg,0,0, Hockey.WITDH, Hockey.HEIGHT);
+        button_ST.setFlip(false,true);
         button_ST.draw(sb);
+        textSound.setFlip(false,true);
         textSound.draw(sb);
-        if(Hockey.flagCheck){
+        if(pref.getMusic()){
+            check.setFlip(false,true);
             check.draw(sb);
         }else {
+            uncheck.setFlip(false,true);
             uncheck.draw(sb);
         }
         sb.end();

@@ -245,7 +245,7 @@ public class PlayStateNetWork extends State implements Screen, GameListener {
 
         message = new JSONObject();
         message.put(Messsage.OP_MESSAGE, Messsage.MOVE_PANDLE);
-        message.put(Messsage.POINT_X, screenX * (Config.SCREEN_MAIN.x / Hockey.WITDH)); // dua ve chuan man hinh mac dinh la 480x800
+        message.put(Messsage.POINT_X, screenX * (Config.SCREEN_MAIN.x / Hockey.WITDH)); // dua ve chuan man hinh mac dinh la 480x741
         message.put(Messsage.POINT_Y, screenY * (Config.SCREEN_MAIN.y / Hockey.HEIGHT));
         gameClient.sendMessageUDP(message.toString());
 

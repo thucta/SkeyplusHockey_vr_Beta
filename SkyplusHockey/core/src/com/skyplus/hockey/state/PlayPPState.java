@@ -4,30 +4,37 @@ package com.skyplus.hockey.state;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.skyplus.hockey.Hockey;
+import com.skyplus.hockey.objects.Audio;
 
 /**
  * Created by THUC UYEN on 29-Apr-17.
  */
-public class PlayPPState extends State implements Screen {
+public class PlayPPState extends State implements Screen{
 
 
     private Texture bg;
-    private Sprite button_Local, button_Bluetooth;
-
-
+    private Sprite button_Local,button_Bluetooth, button_Exit;
+    private  Audio audio;
+    
     public PlayPPState(GameStateManager gsm) {
         super(gsm);
-        bg = new Texture(Hockey.PATCH + "backGame.png");
-        button_Local = new Sprite(new Texture(Hockey.PATCH + "buttonLocal.png"));
-        button_Bluetooth = new Sprite(new Texture(Hockey.PATCH + "buttonBluetooth.png"));
+        Gdx.app.log("here","MenuState");
+        bg = new Texture(Hockey.PATCH+"backGame.png");
+        button_Local = new Sprite(new Texture(Hockey.PATCH+"buttonLocal.png"));
+        button_Bluetooth = new Sprite(new Texture(Hockey.PATCH+"buttonInter.png"));
+        button_Exit = new Sprite(new Texture(Hockey.PATCH+"buttonExit.png"));
 
-        button_Local.setPosition(Hockey.WITDH / 2 - button_Local.getWidth() / 2, Hockey.HEIGHT / 3 - button_Local.getHeight() / 2);
-        button_Bluetooth.setPosition(Hockey.WITDH / 2 - button_Bluetooth.getWidth() / 2, Hockey.HEIGHT * 2 / 3 - button_Bluetooth.getHeight() / 2);
 
+        float witdh = Hockey.WITDH/2-button_Local.getWidth()/2;
+        button_Local.setPosition(witdh, Hockey.HEIGHT/4-button_Local.getHeight()/2);
+        button_Bluetooth.setPosition(witdh, Hockey.HEIGHT/2-button_Bluetooth.getHeight()/2);
+        button_Exit.setPosition(witdh, Hockey.HEIGHT*3/4- button_Exit.getHeight()/2);
+audio = new Audio();
     }
 
     @Override
@@ -50,13 +57,20 @@ public class PlayPPState extends State implements Screen {
 
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-               if (button_Local.getBoundingRectangle().contains(screenX, screenY)) {
-                    gsm.set(new ModeState(gsm));
+                if (button_Local.getBoundingRectangle().contains(screenX,screenY)) {
+                    audio.getClick().play();
+                    gsm.set(new PlayState(gsm));
                     dispose();
-                    dispose();
-                } else if (button_Bluetooth.getBoundingRectangle().contains(screenX, screenY)) {
+                }
+                else if (button_Bluetooth.getBoundingRectangle().contains(screenX,screenY)) {
+                    audio.getClick().play();
                     gsm.set(new JoinGameState(gsm));
-//                    dispose();
+                    dispose();
+                }
+                else if(button_Exit.getBoundingRectangle().contains(screenX,screenY)){
+                    audio.getClick().play();
+                    gsm.set(new MenuState(gsm));
+                    dispose();
                 }
                 return false;
             }
@@ -90,11 +104,18 @@ public class PlayPPState extends State implements Screen {
 
     @Override
     public void render(SpriteBatch sb) {
+        Gdx.gl.glClearColor(0,0,0.2f,1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
-        sb.draw(bg, 0, 0, Hockey.WITDH, Hockey.HEIGHT);
+        sb.draw(bg,0,0, Hockey.WITDH, Hockey.HEIGHT);
+        button_Local.setFlip(false,true);
         button_Local.draw(sb);
+        button_Bluetooth.setFlip(false,true);
         button_Bluetooth.draw(sb);
+        button_Exit.setFlip(false,true);
+        button_Exit.draw(sb);
+
         sb.end();
 
     }
@@ -132,6 +153,5 @@ public class PlayPPState extends State implements Screen {
     public void dispose() {
         bg.dispose();
     }
-
 
 }
