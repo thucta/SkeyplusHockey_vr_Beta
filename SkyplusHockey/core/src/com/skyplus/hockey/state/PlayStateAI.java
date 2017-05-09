@@ -331,11 +331,11 @@ public class PlayStateAI extends State implements Screen {
 //        Intersector.overlaps(puck.getBounds(),this.background.getMapEdge().get(Config.EDGE_RIGHT_TOP_LIGHT ).getBound());
         if(!movedball) {
             if(puck.getY()>Hockey.HEIGHT/2) {
-                pandle_green.move(pandle_pink.getX()+pandle_pink.getWitdh()/2, Hockey.HEIGHT / 9);
+               checkmoveforAIpandle(pandle_pink.getX()+pandle_pink.getWitdh()/2, Hockey.HEIGHT / 9);
             }
             else
             {
-                pandle_green.move(pandle_pink.getX()+pandle_pink.getWitdh()/2,pandle_pink.getY()+pandle_pink.getHeight()/2);
+                checkmoveforAIpandle(pandle_pink.getX()+pandle_pink.getWitdh()/2,pandle_pink.getY()+pandle_pink.getHeight()/2);
                 movedball = true;
             }
         }
@@ -467,7 +467,7 @@ public class PlayStateAI extends State implements Screen {
             }
             if (Intersector.overlaps(pandle_green.getBounds(), puck.getBounds())) {
                 bound++;
-                double distance = Math.sqrt(Vector2.dst2(puck.getX(), puck.getY(), pandle_green.getX(), pandle_green.getY()))+2;
+                double distance = Math.sqrt(Vector2.dst2(puck.getX(), puck.getY(), pandle_green.getX(), pandle_green.getY()))+7;
                 Double x = (pandle_green.getX() - puck.getX()) * (pandle_green.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getX();
                 Double y = (pandle_green.getY() - puck.getY()) * (pandle_green.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getY();
                 pandle_green.setPosition(x.floatValue(),y.floatValue());
@@ -558,11 +558,10 @@ public class PlayStateAI extends State implements Screen {
         screenY = (int) Math.min(Math.max(screenY, Hockey.HEIGHT / 2 + pandle_pink.getHeight() / 2),
                 Hockey.HEIGHT - pandle_pink.getHeight() / 2 - (background.getMapEdge().get(Config.EDGE_BOTTOM_RIGHT).getHeight() - 1));
         double distance = Math.sqrt(Vector2.dst2(puck.getX(), puck.getY(), screenX,screenY))+2;
-        if (distance < (puck.getBounds().radius + pandle_pink.getBounds().radius) ) {
+        if (distance < (puck.getBounds().radius + pandle_green.getBounds().radius) ) {
 
             Double x = (screenX - puck.getX()) * (pandle_pink.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getX();
-            Double y = (screenY - puck.getY()) * (pandle_pink.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getY();
-            screenX = x.floatValue();
+            Double y = (screenY - puck.getY()) * (pandle_pink.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getY();screenX = x.floatValue();
             screenY = y.floatValue();
         }
         pandle_pink.move(screenX, screenY);
