@@ -139,8 +139,11 @@ public class JoinGameState extends State implements Screen, GameListener {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         sb.draw(bg, 0, 0, Hockey.WITDH, Hockey.HEIGHT);
+        button_CreateGame.setFlip(false, true);
         button_CreateGame.draw(sb);
+        button_JoinGame.setFlip(false, true);
         button_JoinGame.draw(sb);
+        button_Exit.setFlip(false, true);
         button_Exit.draw(sb);
 //        if (flag){
 //            spriteClickAfter.setAlpha(0.77f);

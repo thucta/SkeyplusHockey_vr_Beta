@@ -17,21 +17,34 @@ public class WinState extends State implements Screen{
 
 
     private Texture bg;
-    private Sprite button_Again, button_NewGame, button_Result;
+    private Sprite button_Again, button_NewGame, button_Result, button_Result2;
+    private String kq2;
 
 
 
 
-    public WinState(GameStateManager gsm, String kq) {
+    public WinState(GameStateManager gsm, String kq, String kq2) {
         super(gsm);
         Gdx.app.log("here","WinState");
         bg = new Texture(Hockey.PATCH+"backGame.png");
+        this.kq2=kq2;
         button_Again = new Sprite(new Texture(Hockey.PATCH+"buttonAgain.png"));
         button_NewGame = new Sprite(new Texture(Hockey.PATCH+"buttonNewGame.png"));
         button_Result = new Sprite(new Texture(Hockey.PATCH +kq+".png"));
-        button_Result.setPosition(Hockey.WITDH/2 - button_Result.getWidth()/2, Hockey.HEIGHT/4- button_Result.getHeight()/2);
-        button_Again.setPosition(Hockey.WITDH/2-button_Again.getWidth()/2, Hockey.HEIGHT/2-button_Again.getHeight()/2);
-        button_NewGame.setPosition(Hockey.WITDH/2-button_NewGame.getWidth()/2, Hockey.HEIGHT*3/4-button_NewGame.getHeight()/2);
+        if(!kq2.equals("null")){
+            button_Result2 = new Sprite(new Texture(Hockey.PATCH +kq2+".png"));
+            button_Result.setPosition(Hockey.WITDH/2 - button_Result.getWidth()/2, Hockey.HEIGHT/5- button_Result.getHeight()/2);
+            button_Again.setPosition(Hockey.WITDH/2-button_Again.getWidth()/2, Hockey.HEIGHT*2/5-button_Again.getHeight()/2);
+            button_NewGame.setPosition(Hockey.WITDH/2-button_NewGame.getWidth()/2, Hockey.HEIGHT*3/5-button_NewGame.getHeight()/2);
+            button_Result2.setPosition(Hockey.WITDH/2 - button_Result2.getWidth()/2, Hockey.HEIGHT*4/5- button_Result2.getHeight()/2);
+
+
+        }else {
+            button_Result.setPosition(Hockey.WITDH/2 - button_Result.getWidth()/2, Hockey.HEIGHT/4- button_Result.getHeight()/2);
+            button_Again.setPosition(Hockey.WITDH/2-button_Again.getWidth()/2, Hockey.HEIGHT/2-button_Again.getHeight()/2);
+            button_NewGame.setPosition(Hockey.WITDH/2-button_NewGame.getWidth()/2, Hockey.HEIGHT*3/4-button_NewGame.getHeight()/2);
+        }
+
 
     }
 
@@ -56,8 +69,14 @@ public class WinState extends State implements Screen{
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                 if (button_Again.getBoundingRectangle().contains(screenX,screenY)) {
-                    gsm.set(new ModeState(gsm));
-                    dispose();
+                    if(kq2.equals("null")){
+                        gsm.set(new PlayStateAI(gsm,PlayStateAI.playmode));
+                        dispose();
+                    }else {
+                        gsm.set(new PlayState(gsm));
+                        dispose();
+                    }
+
                 }
                 else if (button_NewGame.getBoundingRectangle().contains(screenX,screenY)) {
                     gsm.set(new MenuState(gsm));
@@ -106,6 +125,10 @@ public class WinState extends State implements Screen{
         button_Again.draw(sb);
         button_NewGame.setFlip(false,true);
         button_NewGame.draw(sb);
+        if(!kq2.equals("null")){
+            button_Result2.setFlip(false,true);
+            button_Result2.draw(sb);
+        }
 
 
         sb.end();

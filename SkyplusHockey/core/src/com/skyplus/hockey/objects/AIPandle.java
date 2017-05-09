@@ -14,6 +14,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.skyplus.hockey.Hockey;
 import com.skyplus.hockey.config.Config;
 
+import java.util.List;
+
 import static com.badlogic.gdx.math.MathUtils.random;
 
 /**
@@ -31,9 +33,9 @@ public class AIPandle extends Pandle {
     /*
      Các biến di chuyển
    */
-    public static double SPEED_WIDTH = 50000;
-    public static double SPEED_HIEGHT = 70000;
-    public static float elapsed = 0.0001f;
+    public static double SPEED_WIDTH = 90f;
+    public static double SPEED_HEIGHT = 95f;
+    public static float elapsed = 0.15f;
     private Boolean moving = false;
     private Vector2 end = new Vector2(0, 0);
     private  Vector2d velocity ;
@@ -62,7 +64,7 @@ public class AIPandle extends Pandle {
         bounds = new Circle(position.x, position.y, getWitdh() / 2);
         velocity = new Vector2d(0, 0);
         SPEED_WIDTH *= (Hockey.WITDH/ Config.SCREEN_MAIN.x);
-        SPEED_HIEGHT *= (Hockey.HEIGHT/Config.SCREEN_MAIN.y);
+        SPEED_HEIGHT *= (Hockey.HEIGHT/Config.SCREEN_MAIN.y);
         this.background =background;
 
 //        speed *= 2.4;
@@ -84,10 +86,10 @@ public class AIPandle extends Pandle {
         this.background = background;
     }
 
+
     @Override
     public void move(float x, float y) {
         if (y <= Hockey.HEIGHT / 2+getWitdh()/2) {
-
             x = (int) Math.min(Math.max(x, getWitdh() / 2 + background.getMapEdge().get(Config.EDGE_RIGHT_TOP).getWitdh() - 1),
                     Hockey.WITDH - getWitdh() / 2 - (background.getMapEdge().get(Config.EDGE_LEFT_TOP).getWitdh() - 1));
 
@@ -99,7 +101,7 @@ public class AIPandle extends Pandle {
         {
             end.set(position.x,position.y);
         }
-        movement.set(-(end.x-position.x)* elapsed,-(end.y-position.y)  * elapsed);
+        movement.set(-(end.x-position.x)* elapsed/1000,-(end.y-position.y)  * elapsed/1000);
         bodyworld.applyForceToCenter(movement,true);
         world.step(TIMESTEP, VELOCITYINTERATIONS, POSITIONINTERATIONS);
         setVelocitytemp( bodyworld.getLinearVelocity());
@@ -122,7 +124,7 @@ public class AIPandle extends Pandle {
         Vector2 direction = new Vector2(end.x - start.x, end.y - start.y);
         direction.nor();
         double x = direction.x * SPEED_WIDTH * elapsed;
-        double y = direction.y * SPEED_HIEGHT  * elapsed;
+        double y = direction.y * SPEED_HEIGHT  * elapsed;
 
         setVelocity();  // set van toc cho pandle
         position.x += x;

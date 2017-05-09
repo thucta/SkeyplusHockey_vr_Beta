@@ -29,7 +29,7 @@ public class SettingState extends State implements Screen {
         uncheck.setPosition(Hockey.WITDH*4/5, Hockey.HEIGHT/3-uncheck.getHeight()/2);
         textSound = new Sprite(new Texture(Hockey.PATCH+"soundText.png"));
         textSound.setPosition(Hockey.WITDH/5, Hockey.HEIGHT/3-textSound.getHeight()/2);
-        button_ST = new Sprite(new Texture(Hockey.PATCH+"buttonST.png"));
+        button_ST = new Sprite(new Texture(Hockey.PATCH+"buttonExit.png"));
         button_ST.rotate(360);
         button_ST.setPosition(Hockey.WITDH/2-button_ST.getWidth()/2, Hockey.HEIGHT*2/3-button_ST.getHeight()/2);
 

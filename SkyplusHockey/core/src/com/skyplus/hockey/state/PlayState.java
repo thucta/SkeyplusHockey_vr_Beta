@@ -319,14 +319,16 @@ public class PlayState extends State implements Screen {
             screenY = (int) Math.min(Math.max(screenY, pandle_green.getHeight() / 2 + background.getMapEdge().get(Config.EDGE_TOP_RIGHT).getHeight() - 1),
                     Hockey.HEIGHT / 2 - pandle_green.getHeight() / 2);
             double distance = Math.sqrt(Vector2.dst2(puck.getX(), puck.getY(), screenX,screenY))+2;
-            Gdx.app.log("aaa",distance+"");
+
             if (distance < (puck.getBounds().radius + pandle_green.getBounds().radius) ) {
                 Double x = (screenX - puck.getX()) * (pandle_green.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getX();
                 Double y = (screenY - puck.getY()) * (pandle_green.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getY();
+
                screenX = x.floatValue();
                screenY = y.floatValue();
             }
-            pandle_green.move(screenX, screenY);
+
+           pandle_green.move(screenX, screenY);
         } else {
             // gioi han bounds khong cho chay ra khoi mang hinh
             screenX = (int) Math.min(Math.max(screenX, pandle_pink.getWitdh() / 2 + background.getMapEdge().get(Config.EDGE_RIGHT_BOTTOM).getWitdh() - 1),
@@ -367,7 +369,7 @@ public class PlayState extends State implements Screen {
             pandle_pink.setScore();
             if (pandle_pink.getScore() == 5) {
                 audio.getWin().play();
-                gsm.set(new WinState(gsm, "win"));
+                gsm.set(new WinState(gsm, "lose","win"));
                 dispose();
             } else {
                 reLoad();
@@ -384,7 +386,7 @@ public class PlayState extends State implements Screen {
             pandle_green.setScore();
             if (pandle_green.getScore() == 5) {
                 audio.getLose().play();
-                gsm.set(new WinState(gsm, "lose"));
+                gsm.set(new WinState(gsm, "win","lose"));
 
             } else {
                 reLoad();

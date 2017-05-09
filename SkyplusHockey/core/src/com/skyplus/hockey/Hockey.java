@@ -50,7 +50,7 @@ public class Hockey extends Game {
 
 
 		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Hockey.sound = Gdx.audio.newSound(Gdx.files.internal("silence.mp3"));
+		Hockey.sound = Gdx.audio.newSound(Gdx.files.internal("mysound.mp3"));
 
 		if(pref.getMusic()){
 			Hockey.sound.stop();
