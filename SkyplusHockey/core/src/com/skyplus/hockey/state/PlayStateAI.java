@@ -247,8 +247,8 @@ public class PlayStateAI extends State implements Screen {
 
         moveAI();
 
-        checkHit(pandle_green,puck,background);
-        checkHit(pandle_pink,puck,background);
+        checkHit(pandle_green,puck);
+        checkHit(pandle_pink,puck);
 
     }
 
@@ -328,6 +328,7 @@ public class PlayStateAI extends State implements Screen {
     {
 
 
+//        Intersector.overlaps(puck.getBounds(),this.background.getMapEdge().get(Config.EDGE_RIGHT_TOP_LIGHT ).getBound());
         if(!movedball) {
             if(puck.getY()>Hockey.HEIGHT/2) {
                 pandle_green.move(pandle_pink.getX()+pandle_pink.getWitdh()/2, Hockey.HEIGHT / 9);
@@ -453,16 +454,20 @@ public class PlayStateAI extends State implements Screen {
                         break;
                     }
                     default: {
-                        checkHit(pandle_pink, puck, background);
-                        checkHit(pandle_green, puck, background);
+                        checkHit(pandle_pink, puck);
+                        checkHit(pandle_green, puck);
 
                     }
                 }
             }
+            if(Intersector.overlaps(pandle_green.getBounds(), puck.getBounds())&&(Intersector.overlaps(puck.getBounds(),this.background.getMapEdge().get(Config.EDGE_RIGHT_TOP).getBound())))
+            {
+                bound++;
 
+            }
             if (Intersector.overlaps(pandle_green.getBounds(), puck.getBounds())) {
                 bound++;
-                double distance = Math.sqrt(Vector2.dst2(puck.getX(), puck.getY(), pandle_green.getX(), pandle_green.getY()))+0.5;
+                double distance = Math.sqrt(Vector2.dst2(puck.getX(), puck.getY(), pandle_green.getX(), pandle_green.getY()))+2;
                 Double x = (pandle_green.getX() - puck.getX()) * (pandle_green.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getX();
                 Double y = (pandle_green.getY() - puck.getY()) * (pandle_green.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getY();
                 pandle_green.setPosition(x.floatValue(),y.floatValue());
@@ -497,7 +502,7 @@ public class PlayStateAI extends State implements Screen {
     * Ham kiem tra xem cuoi cung cua update thi puck co va cham voi pandle neu co thi di chuyen puck ra xa
     *
     * */
-    public void checkHit(Pandle pandle, Puck puck, BackgroundGame background) {
+    public void checkHit(Pandle pandle, Puck puck) {
 
 
         pandle.hits(puck);

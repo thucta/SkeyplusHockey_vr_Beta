@@ -138,7 +138,7 @@ public class PlayStateNetWork extends State implements GameListener {
         if (!gameClient.isServer()) {
             checkHitClient(pandle_green, puck);
             checkHitClient(pandle_pink, puck);
-            puck.histEdge();
+
         } else {
             message = new JSONObject();
 
@@ -152,6 +152,9 @@ public class PlayStateNetWork extends State implements GameListener {
             checkHitServer(pandle_green, puck);
             checkHitServer(pandle_pink, puck);
 
+        }
+        if(!gameClient.isServer()){
+            puck.histEdge();
         }
 
 
@@ -168,9 +171,9 @@ public class PlayStateNetWork extends State implements GameListener {
         handleInput();
         pandle_pink.update(dt);
         pandle_green.update(dt);
-        if (gameClient.isServer()) {
-            puck.update(dt);
-        }
+        puck.update(dt);
+//        if (gameClient.isServer()) {
+//        }
         goalScore();  // kiem tra xem co ghi duoc diem khong
 
 

@@ -47,7 +47,7 @@ public class Hockey extends Game {
 
 		// dua vao kich thuoc mang hinh set duong dan den thu muc hinh anh phu hop
 		PATCH=WITDH+"x"+HEIGHT+"/";
-
+		Gdx.input.setCatchBackKey(true);
 
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Hockey.sound = Gdx.audio.newSound(Gdx.files.internal("mysound.mp3"));

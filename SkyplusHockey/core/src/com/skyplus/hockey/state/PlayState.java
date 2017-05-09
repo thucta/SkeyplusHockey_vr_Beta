@@ -128,8 +128,7 @@ public class PlayState extends State implements Screen {
         Effect fxGoal = new Effect("goal");
         effectGoal = fxGoal.create();
         effectGoal.setFlip(false,true);
-        //ve hieu ung//
-//        rotateBy(-50);
+
 
         //audio
         audio = new Audio();
@@ -346,19 +345,6 @@ public class PlayState extends State implements Screen {
 
         }
     }
-
-  /*  public void rotateBy(float amountInDegrees) {
-        Array<ParticleEmitter> emitters = effect.getEmitters();
-        for (int i = 0; i < emitters.size; i++) {
-            ParticleEmitter.ScaledNumericValue val = emitters.get(i).getAngle();
-            float amplitude = (val.getHighMax() - val.getHighMin()) / 2f;
-            float h1 = amountInDegrees + amplitude;
-            float h2 = amountInDegrees - amplitude;
-            val.setHigh(h1, h2);
-            val.setLow(amountInDegrees);
-        }
-    }*/
-
 
     /*
            Kiem tra xem score

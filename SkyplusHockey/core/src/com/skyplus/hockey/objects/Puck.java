@@ -1,7 +1,5 @@
 package com.skyplus.hockey.objects;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -36,7 +34,7 @@ public class Puck extends GameObject {
     private static float LIMIT_STOP = 0.3f;
     private static float F_EDGE = 1f;
     private static float RATE_WIDTH ;
-    private static float RATE_HIEGHT ;
+    private static float RATE_HEIGHT;
 
     private ParticleEffect effectEdge;
 
@@ -58,8 +56,8 @@ public class Puck extends GameObject {
         radius = (int) (body.getWidth() / 2);
 
         RATE_WIDTH = (Hockey.WITDH/ Config.SCREEN_MAIN.x);
-        RATE_HIEGHT = (Hockey.HEIGHT/ Config.SCREEN_MAIN.y);
-
+        RATE_HEIGHT = (Hockey.HEIGHT/ Config.SCREEN_MAIN.y);
+        RATE_WIDTH = RATE_HEIGHT = 1;
        audio = new Audio();
 
         Effect fx  = new Effect("fxgreenEdge");
@@ -84,14 +82,13 @@ public class Puck extends GameObject {
             vectorTemp.x = pandle.getVelocity().x;
             vectorTemp.y = pandle.getVelocity().y;
 
-//            Gdx.app.log("sau", velocity+" " );
             //xac ding huong va cham
             Vector2d direction = new Vector2d(position.x - pandle.getX(), position.y - pandle.getY());
 
             velocity = vectorTemp.proj(direction).plus(velocity.proj(direction).times(-1f)
                     .plus(velocity.proj(new Vector2d(direction.y, -direction.x)))).times(0.7f);
 
-            /*
+            /*f
                  F = -F => a1m1 = - a2m2 (m1 = 2/3 m2)    (m1: khoi luong cua puck , m2 : khoi luong cua pandle)
                  => do giam van toc cua puck khi va cham vao cac dia
             */
@@ -116,8 +113,6 @@ public class Puck extends GameObject {
 
     // client dung
     public void histEdge(){
-
-
         for(String key : listEdge.keySet()){
             edge = listEdge.get(key);
             if(Intersector.overlaps(getBounds(),edge.getBound())){
@@ -129,7 +124,6 @@ public class Puck extends GameObject {
     }
 
     // update trang thai cho opuck bao gom vi tri, body,...
-
     private BackgroundGame.Edge edge = null;
     @Override
     public void update(float delta) {
@@ -139,7 +133,8 @@ public class Puck extends GameObject {
         velocity.x *=  SPEED  ;
         velocity.y *= SPEED ;
         position.x += velocity.x * RATE_WIDTH; // chuyen doi ti le mang hinh
-        position.y += velocity.y *RATE_HIEGHT;
+        position.y += velocity.y * RATE_HEIGHT;
+
 
 
 
