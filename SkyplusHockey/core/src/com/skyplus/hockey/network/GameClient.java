@@ -2,9 +2,10 @@ package com.skyplus.hockey.network;
 
 import com.badlogic.gdx.Gdx;
 import com.skyplus.hockey.Hockey;
+import com.skyplus.hockey.config.Messsage;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -15,7 +16,6 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 
 /**
  * Created by TruongNN on 5/5/2017.
@@ -28,7 +28,8 @@ abstract public class GameClient implements GameClientInterface {
     protected InetAddress inetOtherPlayer;
     protected GameListener gameListener;
     protected String nameRoom;
-    public GameClient(GameListener gameListener, String localAddress,String nameRoom) {
+
+    public GameClient(GameListener gameListener, String localAddress, String nameRoom) {
 
         this.localAddress = localAddress;
         this.gameListener = gameListener;
@@ -61,15 +62,7 @@ abstract public class GameClient implements GameClientInterface {
         gameListener.onConnected();
     }
 
-    @Override
-    public void disconnect() {
-        sendMessage("Disconnect");
-        try {
-            socket.close();
-//            socketUDP.close();
-        } catch (IOException io) {
-        }
-    }
+
 
     public void createSocketUDP(InetAddress inetAddress) {
         try {
@@ -98,28 +91,40 @@ abstract public class GameClient implements GameClientInterface {
     }
 
 
-//    protected class ReceiveThread implements Runnable {
-//        public void run() {
-//            Gdx.app.log("Receiving","Message " + socket.getPort() + " " + socket.getInetAddress());
-//            while (isConnected()) {
-//                try {
-//                    ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-//                    String message = in.readUTF();
-//                    gameListener.onMessageReceived(message);
-//
-//                } catch (Exception io) {
-////                    Gdx.app.log(DeviceAPI.TAG, "Disconnected");
-////                    callback.onDisconnected();
-//                }
-//            }
-//            Gdx.app.error("Closed","Khong co nghe");
-//            disconnect();
-//        }
-//    }
+    protected class ReceiveTCP implements Runnable {
+        public void run() {
+            while (isConnected()) {
+                try {
+                    ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+                    String message = in.readUTF();
+                    handleMessageTCP(message);
 
+                } catch (Exception io) {
+
+                    gameListener.onDisconnected();
+
+                    Gdx.app.log("Hockey", "Disconnected");
+                    disconnect();
+                }
+            }
+            disconnect();
+        }
+    }
+
+    private void handleMessageTCP(String message){
+        JSONObject object = new JSONObject(message);
+        String op = object.getString(Messsage.OP_MESSAGE);
+        if(Messsage.PAUSE.equals(op)){
+            Hockey.deviceAPI.showProgressDialog(gameListener,"Pause...");
+        }else if(Messsage.RESUME.equals(op)){
+            Hockey.deviceAPI.closeProgressDialog();
+        }
+
+
+    }
 
     @Override
-    public void sendMessage(String message) {
+    public void sendMessageTCP(String message) {
         try {
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
             oos.writeUTF(message);
@@ -129,7 +134,7 @@ abstract public class GameClient implements GameClientInterface {
         }
     }
     @Override
-    public void sendMessage(Socket socket,String message) {
+    public void sendMessageTCP(Socket socket, String message) {
         try {
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
             oos.writeUTF(message);
@@ -141,7 +146,7 @@ abstract public class GameClient implements GameClientInterface {
 
 
     @Override
-    public void sendMessageUDP(String message) {
+    public synchronized void sendMessageUDP(String message) {
         try {
 
             byte[] m = new byte[256];

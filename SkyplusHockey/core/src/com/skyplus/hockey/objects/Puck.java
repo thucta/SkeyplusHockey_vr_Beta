@@ -31,7 +31,7 @@ public class Puck extends GameObject {
     private Map<String,BackgroundGame.Edge> listEdge;
 
     private int radius;
-    private static float SPEED = 0.98f;
+    private static float SPEED = 0.993f;
     private static float LIMIT = 20 ;
     private static float LIMIT_STOP = 0.3f;
     private static float F_EDGE = 1f;
@@ -88,8 +88,8 @@ public class Puck extends GameObject {
             //xac ding huong va cham
             Vector2d direction = new Vector2d(position.x - pandle.getX(), position.y - pandle.getY());
 
-            velocity = vectorTemp.proj(direction).plus(velocity.proj(direction).times(-1.3f)
-                    .plus(velocity.proj(new Vector2d(direction.y, -direction.x)))).times(0.9f);
+            velocity = vectorTemp.proj(direction).plus(velocity.proj(direction).times(-1f)
+                    .plus(velocity.proj(new Vector2d(direction.y, -direction.x)))).times(0.7f);
 
             /*
                  F = -F => a1m1 = - a2m2 (m1 = 2/3 m2)    (m1: khoi luong cua puck , m2 : khoi luong cua pandle)
@@ -113,22 +113,19 @@ public class Puck extends GameObject {
 
     }
 
-    public boolean histEdge(){
 
-        if (Intersector.overlaps(getBounds(), listEdge.get(Config.EDGE_RIGHT_TOP).getBound())) {
-            Gdx.app.log("dsad","2");
-            return true;
+    // client dung
+    public void histEdge(){
+
+
+        for(String key : listEdge.keySet()){
+            edge = listEdge.get(key);
+            if(Intersector.overlaps(getBounds(),edge.getBound())){
+                edge.setBody_light();
+                audio.getEdgeHitSound().play();
+            }
         }
-        Gdx.app.log("dsad","4");
 
-//        for (String key : listEdge.keySet()){
-//            if(Intersector.overlaps(getBounds(),listEdge.get(key).getBound())){
-//
-//
-//            }
-//        }
-
-        return false;
     }
 
     // update trang thai cho opuck bao gom vi tri, body,...
@@ -282,9 +279,8 @@ public class Puck extends GameObject {
         effectEdge.draw(batch);
     }
 
-    public void update(float x,float y, float velocityX,float velocityY){
+    public void update(float x,float y){
         setPosition(x,y);
-        setVelocity(velocityX,velocityY);
     }
 
     public void reLoadGame(float x,float y){

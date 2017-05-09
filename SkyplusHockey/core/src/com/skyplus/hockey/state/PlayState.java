@@ -172,7 +172,7 @@ public class PlayState extends State implements Screen {
                         dispose();
                     }
                 } else {
-                    move(screenX, screenY);
+                //    move(screenX, screenY);
                     if (button_Pause.getBoundingRectangle().contains(screenX, screenY)) {
 
                         audio.getClick().play();

@@ -31,11 +31,19 @@ public class GameStateManager {
     public void update(float dt){
         states.peek().update(dt);
     }
-
     public void render(SpriteBatch sb){
         states.peek().render(sb);
     }
     public void resize(int width, int height){
         states.peek().resize(width,height);
+    }
+    public void pause(){
+        states.peek().pause();
+    }
+    public void resume(){
+        states.peek().resume();
+    }
+    public void dispose(){
+        states.peek().dispose();
     }
 }

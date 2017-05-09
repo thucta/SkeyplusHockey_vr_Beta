@@ -1,6 +1,5 @@
 package com.skyplus.hockey.network;
 
-import com.badlogic.gdx.Gdx;
 import com.skyplus.hockey.Hockey;
 import com.skyplus.hockey.objects.Room;
 
@@ -13,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by TruongNN on 5/5/2017.
@@ -44,7 +42,7 @@ public class Client extends GameClient {
 
         String subnet = getLocalSubnet();
 
-        Hockey.deviceAPI.showProgressDialog("Waiting...");
+        Hockey.deviceAPI.showProgressDialog(gameListener,"Finding player...");
         for (int i = 0; i <= bitCount; i++) {
             Runnable task = new ConnectThread(subnet + i);
             pool.submit(task);
@@ -70,7 +68,20 @@ public class Client extends GameClient {
         thread.start();
 
     }
+    @Override
+    public void disconnect() {
 
+        try {
+            socket.close();
+        } catch (Exception e) {
+
+        }
+        try {
+            socketUDP.close();
+        } catch (Exception e) {
+
+        }
+    }
     @Override
     public void cancel() {
         if (isConnected()) {
@@ -120,14 +131,15 @@ public class Client extends GameClient {
         @Override
         public void run() {
             try {
-                Hockey.deviceAPI.showProgressDialog("Loading...");
+                Hockey.deviceAPI.showProgressDialog(gameListener,"Loading...");
                 try {
                     socket.close();
                 } catch (Exception e) {
 
                 }
                 // tao ket noi voi server
-                socket = new Socket(room.getSocket(), port);
+                socket = new Socket();
+                socket.connect(new InetSocketAddress(room.getSocket(),port),3000);
 
                 try {
                     if (!socket.getReuseAddress()) {
@@ -142,15 +154,20 @@ public class Client extends GameClient {
                 createSocketUDP(socket.getInetAddress());
                 Thread receiveThread = new Thread(new ReceiveThread());
                 receiveThread.start();
+
+                Thread thread = new Thread(new ReceiveTCP());
+                thread.start();
+
                 gameListener.onConnected();
 
 
             } catch (Exception e) {
-                gameListener.onConnectionFailed();
+//                gameListener.onConnectionFailed();
+                Hockey.deviceAPI.showAlertDialog("Join game faild,Game was started!");
             } finally {
                 try {
-                    Thread.sleep(2000);
                     Hockey.deviceAPI.closeProgressDialog();
+                    Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

@@ -2,7 +2,6 @@ package com.skyplus.hockey.network;
 
 import com.skyplus.hockey.objects.Room;
 
-import java.math.RoundingMode;
 import java.net.Socket;
 
 /**
@@ -19,11 +18,11 @@ public interface GameClientInterface extends Runnable {
 
     void disconnect();
 
-    void sendMessage(String message);
+    void sendMessageTCP(String message);
 
     void sendMessageUDP(String message);
 
-    void sendMessage(Socket socket,String message);
+    void sendMessageTCP(Socket socket, String message);
 
     void setListener(GameListener gameListener);
 

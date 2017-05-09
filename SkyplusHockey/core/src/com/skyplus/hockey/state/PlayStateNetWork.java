@@ -2,15 +2,12 @@ package com.skyplus.hockey.state;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
 import com.skyplus.hockey.Hockey;
 import com.skyplus.hockey.config.Config;
 import com.skyplus.hockey.config.Messsage;
@@ -32,7 +29,7 @@ import java.util.Map;
  */
 
 
-public class PlayStateNetWork extends State implements Screen, GameListener {
+public class PlayStateNetWork extends State implements GameListener {
 
 
     private BackgroundGame background;
@@ -44,9 +41,6 @@ public class PlayStateNetWork extends State implements Screen, GameListener {
     private double WIDTH;
     private double HEIGHT;
 
-    private ParticleEffect effect;
-    Array<ParticleEmitter> emitters;
-
 
     // map diem
     public static Map<Integer, Sprite> mapSpriteScore;
@@ -56,7 +50,6 @@ public class PlayStateNetWork extends State implements Screen, GameListener {
      */
     private GameClientInterface gameClient;
     private JSONObject message;
-
 
     public PlayStateNetWork(GameStateManager gsm, GameClientInterface gameClient) {
         super(gsm);
@@ -86,18 +79,11 @@ public class PlayStateNetWork extends State implements Screen, GameListener {
         WIDTH = (Config.SCREEN_MAIN.x / Hockey.WITDH);
         HEIGHT = (Config.SCREEN_MAIN.y / Hockey.HEIGHT);
 
-
-        effect = new ParticleEffect();
-        effect.load(Gdx.files.internal("ex.p"), Gdx.files.internal(""));
-        emitters = effect.getEmitters();
-        effect.setPosition(-100, -100);
-        effect.start();
-
-
     }
 
     @Override
     public void handleInput() {
+
 
         Gdx.input.setInputProcessor(new InputProcessor() {
 
@@ -149,17 +135,18 @@ public class PlayStateNetWork extends State implements Screen, GameListener {
 
 
         // neu pandle va cham voi puck thi pandle se sang len
-        if(!gameClient.isServer()){
-            checkHitClient(pandle_green,puck);
-            checkHitClient(pandle_pink,puck);
-        }else{
+        if (!gameClient.isServer()) {
+            checkHitClient(pandle_green, puck);
+            checkHitClient(pandle_pink, puck);
+            puck.histEdge();
+        } else {
             message = new JSONObject();
+
             message.put(Messsage.OP_MESSAGE, Messsage.MOVE_PUCK);
             message.put(Messsage.POINT_X, puck.getX() * WIDTH);
             message.put(Messsage.POINT_Y, puck.getY() * HEIGHT);
-            message.put(Messsage.VELOCITY_X, puck.getVelocity().x);
-            message.put(Messsage.VELOCITY_Y, puck.getVelocity().y);
             gameClient.sendMessageUDP(message.toString());
+
 
             // neu nguoi choi la server thi se kiem tra xem puck co va cham voi pandle khong
             checkHitServer(pandle_green, puck);
@@ -168,7 +155,10 @@ public class PlayStateNetWork extends State implements Screen, GameListener {
         }
 
 
+    }
 
+    private void exitGame() {
+        Hockey.deviceAPI.showAlertDialogExitGame(this, "Exit game?");
     }
 
 
@@ -178,9 +168,11 @@ public class PlayStateNetWork extends State implements Screen, GameListener {
         handleInput();
         pandle_pink.update(dt);
         pandle_green.update(dt);
-        puck.update(dt);
+        if (gameClient.isServer()) {
+            puck.update(dt);
+        }
         goalScore();  // kiem tra xem co ghi duoc diem khong
-        effect.update(dt);
+
 
     }
 
@@ -198,7 +190,6 @@ public class PlayStateNetWork extends State implements Screen, GameListener {
         puck.draw(sb);
         pandle_pink.draw(sb);
         pandle_green.draw(sb);
-        effect.draw(sb);
         drawScores(sb);
         sb.end();
     }
@@ -235,6 +226,7 @@ public class PlayStateNetWork extends State implements Screen, GameListener {
 
 
     }
+
     /*
         Giới hạn không cho di chuyển ra khởi màng hình, va di chuyen
     **/
@@ -245,7 +237,7 @@ public class PlayStateNetWork extends State implements Screen, GameListener {
 
         message = new JSONObject();
         message.put(Messsage.OP_MESSAGE, Messsage.MOVE_PANDLE);
-        message.put(Messsage.POINT_X, screenX * (Config.SCREEN_MAIN.x / Hockey.WITDH)); // dua ve chuan man hinh mac dinh la 480x741
+        message.put(Messsage.POINT_X, screenX * (Config.SCREEN_MAIN.x / Hockey.WITDH)); // dua ve chuan man hinh mac dinh la 480x800
         message.put(Messsage.POINT_Y, screenY * (Config.SCREEN_MAIN.y / Hockey.HEIGHT));
         gameClient.sendMessageUDP(message.toString());
 
@@ -285,19 +277,6 @@ public class PlayStateNetWork extends State implements Screen, GameListener {
     }
 
 
-    public void rotateBy(float amountInDegrees) {
-        Array<ParticleEmitter> emitters = effect.getEmitters();
-        for (int i = 0; i < emitters.size; i++) {
-            ParticleEmitter.ScaledNumericValue val = emitters.get(i).getAngle();
-            float amplitude = (val.getHighMax() - val.getHighMin()) / 2f;
-            float h1 = amountInDegrees + amplitude;
-            float h2 = amountInDegrees - amplitude;
-            val.setHigh(h1, h2);
-            val.setLow(amountInDegrees);
-        }
-    }
-
-
     /*
            Kiem tra xem score
      */
@@ -334,14 +313,10 @@ public class PlayStateNetWork extends State implements Screen, GameListener {
         // green ghi diem
         if (1 == flag) {
             puck.reLoadGame(Hockey.WITDH / 2, Hockey.HEIGHT / 2 - pandle_pink.getHeight());
-            effect.setPosition(Hockey.WITDH / 2, 10);
-            effect.reset();
         } else { // pink ghi diem
             puck.reLoadGame(Hockey.WITDH / 2, Hockey.HEIGHT / 2 + pandle_pink.getHeight());
-            effect.setPosition(Hockey.WITDH / 2, Hockey.HEIGHT - 10);
-            effect.reset();
         }
-
+        Hockey.deviceAPI.vibRate(Config.miliSecond);
 
     }
 
@@ -374,35 +349,26 @@ public class PlayStateNetWork extends State implements Screen, GameListener {
         this.pandle_green = pandle_green;
     }
 
-    @Override
-    public void show() {
-
-    }
-
-    @Override
-    public void render(float delta) {
-
-    }
 
     @Override
     public void resize(int width, int height) {
-//       gamePort.update(width,height);
+
     }
 
     @Override
     public void pause() {
-
+        message = new JSONObject();
+        message.put(Messsage.OP_MESSAGE, Messsage.PAUSE);
+        gameClient.sendMessageTCP(message.toString());
     }
 
     @Override
     public void resume() {
-
+        message = new JSONObject();
+        message.put(Messsage.OP_MESSAGE, Messsage.RESUME);
+        gameClient.sendMessageTCP(message.toString());
     }
 
-    @Override
-    public void hide() {
-
-    }
 
     @Override
     public void dispose() {
@@ -412,7 +378,6 @@ public class PlayStateNetWork extends State implements Screen, GameListener {
     /*
         Cac method lop mang
      */
-
     @Override
     public void createServer(String nameRoom) {
 
@@ -424,44 +389,76 @@ public class PlayStateNetWork extends State implements Screen, GameListener {
     }
 
     @Override
+    public void backProgesDialog() {
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                gsm.set(new JoinGameState(gsm));
+            }
+        }, 0.2f);
+    }
+
+    @Override
     public void onConnected() {
 
     }
 
     @Override
     public void onDisconnected() {
+        Hockey.deviceAPI.showAlertDialogDisconnected(this, "Player disconnected...");
+        try {
+            Hockey.deviceAPI.closeProgressDialog();
+        } catch (Exception e) {
 
+        }
     }
 
     @Override
     public void onConnectionFailed() {
+        Gdx.app.error("dsad", "onConnectionFailed");
+        try {
+            gameClient.disconnect();
+        } catch (Exception e) {
 
+        }
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                gsm.set(new MenuState(gsm));
+                dispose();
+            }
+        }, 0.2f);
     }
+
+
 
     @Override
     public void onMessageReceived(String message) {
         try {
             JSONObject object = new JSONObject(message);
+
             String op = object.getString(Messsage.OP_MESSAGE);
+
             // pandle di chuyen
             if (Messsage.MOVE_PANDLE.equals(op)) {
                 float x = (float) object.getDouble(Messsage.POINT_X);
                 float y = (float) object.getDouble(Messsage.POINT_Y);
                 x *= 1 / WIDTH;
                 y *= 1 / HEIGHT;
-                pandle_green.move(x, Hockey.HEIGHT / 2 - (y - Hockey.HEIGHT / 2));
+                y = 2 * Hockey.HEIGHT / 2 - y;
+//                Hockey.HEIGHT / 2 - (y - Hockey.HEIGHT / 2)
+                pandle_green.move(x, y);
                 // puck di chuyen
             } else if (Messsage.MOVE_PUCK.equals(op)) {
                 float puckX = (float) object.getDouble(Messsage.POINT_X);
                 float puckY = (float) object.getDouble(Messsage.POINT_Y);
-                float velocityX = (float) object.getDouble(Messsage.VELOCITY_X);
-                float velocityY = (float) object.getDouble(Messsage.VELOCITY_Y);
 
                 // chuyen doi ti le cac mang hinh
                 puckX *= 1 / WIDTH;
                 puckY *= 1 / HEIGHT;
-                velocityY *= -1;
-                puck.update(puckX, Hockey.HEIGHT / 2 - (puckY - Hockey.HEIGHT / 2), velocityX, velocityY);
+
+                puckY = 2 * Hockey.HEIGHT / 2 - puckY; // doi xung y qua diem giua  xh = (xM + xN)/2 yh = (yM + yN)/2
+                puck.update(puckX, puckY);
 
                 // update diem
             } else if (Messsage.UPDATE_SCORE.equals(op)) {
@@ -475,7 +472,6 @@ public class PlayStateNetWork extends State implements Screen, GameListener {
                 }
 
             }
-
         } catch (Exception e) {
             Gdx.app.error("message error", e + "");
         }

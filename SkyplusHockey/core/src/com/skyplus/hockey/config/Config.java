@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 public class Config {
 
     public static Vector2 SCREEN_MAIN = new Vector2(480,800);
-
+    public static int miliSecond = 500;
     public static String BACKGROUND = "bg";
 
     public static String EDGE_RIGHT_TOP = "bg_r_t";

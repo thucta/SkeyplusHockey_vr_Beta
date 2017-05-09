@@ -50,18 +50,13 @@ public class JoinGameState extends State implements Screen, GameListener {
 
     @Override
     public void handleInput() {
+
+
         Gdx.input.setInputProcessor(new InputProcessor() {
             @Override
             public boolean keyDown(int keycode) {
-                if (keycode == Input.Keys.BACK) {
-                    Gdx.app.error("keydow","Back");
-                    if (Hockey.deviceAPI.progressDialogIsShow()) {
-                        gsm.set(new JoinGameState(gsm));
-                    }else{
-                        gsm.set(new MenuState(gsm));
-                    }
-                }
-                return true;
+
+                return false;
             }
 
             @Override
@@ -78,9 +73,7 @@ public class JoinGameState extends State implements Screen, GameListener {
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
                 // khi mang hinh dang cho khong cho tac dong
-                if (Hockey.deviceAPI.progressDialogIsShow()) {
-                    return false;
-                }
+
 
                 // click button tao game
                 if (button_CreateGame.getBoundingRectangle().contains(screenX, screenY)) {
@@ -211,6 +204,22 @@ public class JoinGameState extends State implements Screen, GameListener {
     @Override
     public void connectServer(Room room) {
         gameClient.connectServer(room);
+    }
+
+    @Override
+    public void backProgesDialog() {
+        try {
+            gameClient.disconnect();
+        }catch (Exception e){
+
+        }
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                gsm.set(new JoinGameState(gsm));
+            }
+        }, 0.2f);
+
     }
 
 

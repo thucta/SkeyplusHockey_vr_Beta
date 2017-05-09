@@ -86,4 +86,14 @@ public class Hockey extends Game {
 	public void setPatch(){
 			PATCH = WITDH+"x"+HEIGHT;
 	}
+
+	@Override
+	public void pause() {
+		gms.pause();
+	}
+
+	@Override
+	public void resume() {
+		gms.resume();
+	}
 }

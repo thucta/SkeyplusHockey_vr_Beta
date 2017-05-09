@@ -1,6 +1,5 @@
 package com.skyplus.hockey.network;
 
-import com.skyplus.hockey.objects.DeviceAPI;
 import com.skyplus.hockey.objects.Room;
 
 /**
@@ -11,7 +10,7 @@ public interface GameListener {
     void createServer(String nameRoom);
 
     void connectServer(Room room);
-
+    void backProgesDialog();
     void onConnected();
 
     void onDisconnected();

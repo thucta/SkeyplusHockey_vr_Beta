@@ -13,8 +13,14 @@ public interface DeviceAPI {
     void showNotification(String message);
 
     void showAlertDialog(GameListener gameListener, List<Room> rooms);
+
     void showAlertDialog(String message);
-    void showProgressDialog(String message);
+
+    void showAlertDialogDisconnected(GameListener gameListener, String message);
+
+    void showAlertDialogExitGame(GameListener gameListener, String message);
+
+    void showProgressDialog(GameListener gameListener, String message);
 
     void closeProgressDialog();
 
@@ -22,9 +28,5 @@ public interface DeviceAPI {
 
     void showInputDialog(GameListener gameListener);
 
-    void startRecording();
-
-    void transmit(byte[] message);
-
-    int getBufferSize();
+    void vibRate(int miliSecond);
 }
