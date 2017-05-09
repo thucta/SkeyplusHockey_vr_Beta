@@ -161,7 +161,7 @@ public class PlayState extends State implements Screen {
                         resume();
                     } else if (button_NewGame.getBoundingRectangle().contains(screenX, screenY)) {
                         audio.getClick().play();
-                        gsm.set(new PlayStateAI(gsm, 1));
+                        gsm.set(new PlayState(gsm));
                         dispose();
                     } else if (button_Exit.getBoundingRectangle().contains(screenX, screenY)) {
                         audio.getClick().play();

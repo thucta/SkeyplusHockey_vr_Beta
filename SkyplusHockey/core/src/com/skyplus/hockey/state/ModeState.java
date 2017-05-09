@@ -79,7 +79,7 @@ audio = new Audio();
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
                 if (button_Mode1.getBoundingRectangle().contains(screenX,screenY)) {
-audio.getClick().play();
+                    audio.getClick().play();
                     gsm.set(new PlayStateAI(gsm,1));
                     dispose();
                 }

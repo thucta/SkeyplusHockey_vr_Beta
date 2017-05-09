@@ -189,7 +189,7 @@ public class PlayStateAI extends State implements Screen {
                     if(button_Resume.getBoundingRectangle().contains(screenX,screenY)){
                         resume();
                     }else if(button_NewGame.getBoundingRectangle().contains(screenX,screenY)){
-                        gsm.set(new PlayState(gsm));
+                        gsm.set(new PlayStateAI(gsm,playmode));
                         dispose();
                     }else if(button_Exit.getBoundingRectangle().contains(screenX,screenY)){
                         gsm.set(new MenuState(gsm));
@@ -618,7 +618,7 @@ public class PlayStateAI extends State implements Screen {
     }
 
     @Override
-    public void resume() {GAME_PAUSED = true;
+    public void resume() {GAME_PAUSED = false;
 
     }
 
