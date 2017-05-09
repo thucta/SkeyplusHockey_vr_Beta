@@ -41,6 +41,7 @@ public class PlayState extends State implements Screen {
 
     private ParticleEffect effectGood;
     private ParticleEffect effectPuck;
+    private ParticleEffect effectGoal;
 
     private Sprite button_Resume, button_NewGame, button_Exit, button_Pause;
     private boolean GAME_PAUSED = false;
@@ -122,9 +123,11 @@ public class PlayState extends State implements Screen {
         //fx
         Effect fx = new Effect("fxRed");
         effectGood = fx.create();
-
         Effect fxEdge = new Effect("fxRedEdge");
         effectPuck = fxEdge.create();
+        Effect fxGoal = new Effect("goal");
+        effectGoal = fxGoal.create();
+        effectGoal.setFlip(false,true);
         //ve hieu ung//
 //        rotateBy(-50);
 
@@ -222,6 +225,7 @@ public class PlayState extends State implements Screen {
             goalScore();  // kiem tra xem co ghi duoc diem khong
             effectGood.update(dt);
             effectPuck.update(dt);
+            effectGoal.update(dt);
         }
 
     }
@@ -245,7 +249,7 @@ public class PlayState extends State implements Screen {
             puck.drawEffect(sb);
             effectGood.draw(sb);
             effectPuck.draw(sb);
-
+            effectGoal.draw(sb);
             button_Pause.draw(sb);
             drawScores(sb);
 
@@ -260,6 +264,7 @@ public class PlayState extends State implements Screen {
             puck.drawEffect(sb);
             effectGood.draw(sb);
             effectPuck.draw(sb);
+            effectGoal.draw(sb);
 
             puck.draw(sb);
             pandle_pink.draw(sb);
@@ -306,51 +311,34 @@ public class PlayState extends State implements Screen {
     /*
         Giới hạn không cho di chuyển ra khởi màng hình, va di chuyen
     **/
-    private  Circle circle = new Circle();
     public void move(float screenX, float screenY) {
 
         if (screenY < Hockey.HEIGHT / 2) {
-
             screenX = (int) Math.min(Math.max(screenX, pandle_green.getWitdh() / 2 + background.getMapEdge().get(Config.EDGE_RIGHT_TOP).getWitdh() - 1),
                     Hockey.WITDH - pandle_green.getWitdh() / 2 - (background.getMapEdge().get(Config.EDGE_LEFT_TOP).getWitdh() - 1));
-
             screenY = (int) Math.min(Math.max(screenY, pandle_green.getHeight() / 2 + background.getMapEdge().get(Config.EDGE_TOP_RIGHT).getHeight() - 1),
                     Hockey.HEIGHT / 2 - pandle_green.getHeight() / 2);
-
-            circle.set(screenX,screenY,pandle_green.getWitdh()/2);
-            if (Intersector.overlaps(puck.getBounds(), circle) && puck.histEdge() ) {
-                 double distance = Math.sqrt(Vector2.dst2(puck.getX(), puck.getY(), circle.x,circle.y));
-
-//                Double x = (puck.getX() - pandle.getX()) * (puck.getWitdh() / 2 + pandle.getWitdh() / 2) / distance + pandle.getX();
-//                Double y = (puck.getY() - pandle.getY()) * (puck.getWitdh() / 2 + pandle.getWitdh() / 2) / distance + pandle.getY();
-                Gdx.app.log("dsadas","3");
-                Double x = (circle.x - puck.getX()) * (circle.radius + puck.getWitdh() / 2) / distance + puck.getX();
-                Double y = (circle.y - puck.getY()) * (circle.radius + puck.getWitdh() / 2) / distance + puck.getY();
-                screenX = x.floatValue();
-                screenY = y.floatValue();
-
+            double distance = Math.sqrt(Vector2.dst2(puck.getX(), puck.getY(), screenX,screenY))+2;
+            Gdx.app.log("aaa",distance+"");
+            if (distance < (puck.getBounds().radius + pandle_green.getBounds().radius) ) {
+                Double x = (screenX - puck.getX()) * (pandle_green.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getX();
+                Double y = (screenY - puck.getY()) * (pandle_green.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getY();
+               screenX = x.floatValue();
+               screenY = y.floatValue();
             }
-
             pandle_green.move(screenX, screenY);
-
         } else {
-            double distance = Math.sqrt(Vector2.dst2(puck.getX(), puck.getY(), pandle_pink.getX(), pandle_pink.getY()));
             // gioi han bounds khong cho chay ra khoi mang hinh
             screenX = (int) Math.min(Math.max(screenX, pandle_pink.getWitdh() / 2 + background.getMapEdge().get(Config.EDGE_RIGHT_BOTTOM).getWitdh() - 1),
                     Hockey.WITDH - pandle_pink.getWitdh() / 2 - (background.getMapEdge().get(Config.EDGE_LEFT_BOTTOM).getWitdh() - 1));
-
             screenY = (int) Math.min(Math.max(screenY, Hockey.HEIGHT / 2 + pandle_pink.getHeight() / 2),
                     Hockey.HEIGHT - pandle_pink.getHeight() / 2 - (background.getMapEdge().get(Config.EDGE_BOTTOM_RIGHT).getHeight() - 1));
+            double distance = Math.sqrt(Vector2.dst2(puck.getX(), puck.getY(), screenX,screenY))+2;
+            if (distance < (puck.getBounds().radius + pandle_green.getBounds().radius) ) {
 
-            if (Intersector.overlaps(pandle_pink.getBounds(), puck.getBounds())) {
-
-
-
-                Double x = (pandle_pink.getX() - puck.getX()) * (pandle_pink.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getX();
-                Double y = (pandle_pink.getY() - puck.getY()) * (pandle_pink.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getY();
-                screenX = x.floatValue();
-                screenY = y.floatValue();
-
+               Double x = (screenX - puck.getX()) * (pandle_pink.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getX();
+                Double y = (screenY - puck.getY()) * (pandle_pink.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getY();screenX = x.floatValue();
+               screenY = y.floatValue();
             }
             pandle_pink.move(screenX, screenY);
 
@@ -386,6 +374,8 @@ public class PlayState extends State implements Screen {
                 puck.reLoadGame(Hockey.WITDH / 2, Hockey.HEIGHT / 2 - 100);
                 effectGood.setPosition(Hockey.WITDH / 2, 10);
                 effectGood.reset();
+                effectGoal.setPosition(Hockey.WITDH / 2, Hockey.HEIGHT / 4);
+                effectGoal.reset();
                 audio.getGoal().play();
             }
 
@@ -401,6 +391,8 @@ public class PlayState extends State implements Screen {
                 puck.reLoadGame(Hockey.WITDH / 2, Hockey.HEIGHT / 2 + 100);
                 effectGood.setPosition(Hockey.WITDH / 2, Hockey.HEIGHT - 10);
                 effectGood.reset();
+                effectGoal.setPosition(Hockey.WITDH / 2, Hockey.HEIGHT / 3 * 2);
+               effectGoal.reset();
                 audio.getGoal().play();
             }
         }

@@ -314,7 +314,6 @@ public class PlayStateAI extends State implements Screen {
     public void moveAI()
     {
 
-
         if(!movedball) {
             if(puck.getY()>Hockey.HEIGHT/2) {
                 pandle_green.move(pandle_pink.getX()+pandle_pink.getWitdh()/2, Hockey.HEIGHT / 9);

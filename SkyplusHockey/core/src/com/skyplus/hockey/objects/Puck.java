@@ -31,7 +31,7 @@ public class Puck extends GameObject {
     private Map<String,BackgroundGame.Edge> listEdge;
 
     private int radius;
-    private static float SPEED = 0.99f;
+    private static float SPEED = 0.98f;
     private static float LIMIT = 20 ;
     private static float LIMIT_STOP = 0.3f;
     private static float F_EDGE = 1f;
