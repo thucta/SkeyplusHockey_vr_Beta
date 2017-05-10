@@ -3,6 +3,7 @@ package com.skyplus.hockey.state;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Intersector;
@@ -13,7 +14,9 @@ import com.skyplus.hockey.config.Config;
 import com.skyplus.hockey.config.Messsage;
 import com.skyplus.hockey.network.GameClientInterface;
 import com.skyplus.hockey.network.GameListener;
+import com.skyplus.hockey.objects.Audio;
 import com.skyplus.hockey.objects.BackgroundGame;
+import com.skyplus.hockey.objects.Effect;
 import com.skyplus.hockey.objects.Pandle;
 import com.skyplus.hockey.objects.Puck;
 import com.skyplus.hockey.objects.Room;
@@ -41,7 +44,10 @@ public class PlayStateNetWork extends State implements GameListener {
     private double WIDTH;
     private double HEIGHT;
 
-
+    private ParticleEffect effectGood;
+    private ParticleEffect effectPuck;
+    private ParticleEffect effectGoal;
+    private Audio audio;
     // map diem
     public static Map<Integer, Sprite> mapSpriteScore;
 
@@ -78,6 +84,18 @@ public class PlayStateNetWork extends State implements GameListener {
 
         WIDTH = (Config.SCREEN_MAIN.x / Hockey.WITDH);
         HEIGHT = (Config.SCREEN_MAIN.y / Hockey.HEIGHT);
+
+
+
+        //fx
+        Effect fx = new Effect("fxRed");
+        effectGood = fx.create();
+        Effect fxEdge = new Effect("fxRedEdge");
+        effectPuck = fxEdge.create();
+        Effect fxGoal = new Effect("goal");
+        effectGoal = fxGoal.create();
+        effectGoal.setFlip(false,true);
+        audio = new Audio();
 
     }
 
@@ -175,6 +193,9 @@ public class PlayStateNetWork extends State implements GameListener {
 //        if (gameClient.isServer()) {
 //        }
         goalScore();  // kiem tra xem co ghi duoc diem khong
+        effectGood.update(dt);
+        effectPuck.update(dt);
+        effectGoal.update(dt);
 
 
     }
@@ -194,6 +215,10 @@ public class PlayStateNetWork extends State implements GameListener {
         pandle_pink.draw(sb);
         pandle_green.draw(sb);
         drawScores(sb);
+        puck.drawEffect(sb);
+        effectGood.draw(sb);
+        effectPuck.draw(sb);
+        effectGoal.draw(sb);
         sb.end();
     }
 
@@ -210,6 +235,11 @@ public class PlayStateNetWork extends State implements GameListener {
         if (Intersector.overlaps(pandle.getBounds(), puck.getBounds())) {
             Double x = (puck.getX() - pandle.getX()) * (puck.getWitdh() / 2 + pandle.getWitdh() / 2) / distance + pandle.getX();
             Double y = (puck.getY() - pandle.getY()) * (puck.getWitdh() / 2 + pandle.getWitdh() / 2) / distance + pandle.getY();
+
+            effectPuck.setPosition(x.floatValue(), y.floatValue());
+            effectPuck.reset();
+
+
             puck.setPosition(x.floatValue(), y.floatValue());
 
         }
@@ -223,6 +253,10 @@ public class PlayStateNetWork extends State implements GameListener {
         if (Intersector.overlaps(pandle.getBounds(), puck.getBounds())) {
             Double x = (puck.getX() - pandle.getX()) * (puck.getWitdh() / 2 + pandle.getWitdh() / 2) / distance + pandle.getX();
             Double y = (puck.getY() - pandle.getY()) * (puck.getWitdh() / 2 + pandle.getWitdh() / 2) / distance + pandle.getY();
+
+            effectPuck.setPosition(x.floatValue(), y.floatValue());
+            effectPuck.reset();
+
             puck.setPosition(x.floatValue(), y.floatValue());
 
         }
@@ -295,7 +329,6 @@ public class PlayStateNetWork extends State implements GameListener {
             message.put(Messsage.OP_MESSAGE, Messsage.UPDATE_SCORE);
             message.put(Messsage.SCORE, Messsage.SCORE_PINK);
             gameClient.sendMessageUDP(message.toString());
-
             reLoad(1);
 
 
@@ -316,9 +349,37 @@ public class PlayStateNetWork extends State implements GameListener {
         pandle_green.reLoadGame(Hockey.WITDH / 2, pandle_pink.getHeight());
         // green ghi diem
         if (1 == flag) {
-            puck.reLoadGame(Hockey.WITDH / 2, Hockey.HEIGHT / 2 - pandle_pink.getHeight());
-        } else { // pink ghi diem
-            puck.reLoadGame(Hockey.WITDH / 2, Hockey.HEIGHT / 2 + pandle_pink.getHeight());
+            if (pandle_pink.getScore() == 5) {
+                audio.getWin().play();
+                gsm.set(new WinState(gsm, "lose","win"));
+                dispose();
+            } else {
+                effectGood.setPosition(Hockey.WITDH / 2, 10);
+                effectGood.reset();
+                effectGoal.setPosition(Hockey.WITDH / 2, Hockey.HEIGHT / 3 * 2);
+                effectGoal.reset();
+                audio.getGoal().play();
+                puck.reLoadGame(Hockey.WITDH / 2, Hockey.HEIGHT / 2 - pandle_pink.getHeight());
+            }
+        } else {
+
+
+            // pink ghi diem
+
+            if (pandle_green.getScore() == 5) {
+                audio.getLose().play();
+                gsm.set(new WinState(gsm, "win","lose"));
+
+            } else {
+
+                effectGood.setPosition(Hockey.WITDH / 2, Hockey.HEIGHT - 10);
+                effectGood.reset();
+                effectGoal.setPosition(Hockey.WITDH / 2, Hockey.HEIGHT / 4);
+                effectGoal.reset();
+                audio.getGoal().play();
+
+                puck.reLoadGame(Hockey.WITDH / 2, Hockey.HEIGHT / 2 + pandle_pink.getHeight());
+            }
         }
         Hockey.deviceAPI.vibRate(Config.miliSecond);
 

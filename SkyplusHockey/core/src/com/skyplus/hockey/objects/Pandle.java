@@ -166,7 +166,7 @@ private  Audio audio;
 
     public void setScore() {
         this.score++;
-        this.score = Math.min(Math.max(this.score, 0),9);
+        this.score = Math.min(Math.max(this.score, 0),5);
     }
 
 

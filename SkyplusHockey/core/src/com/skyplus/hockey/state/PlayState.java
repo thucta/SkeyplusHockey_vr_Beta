@@ -521,7 +521,7 @@ public class PlayState extends State implements Screen {
 
     @Override
     public void resume() {
-       this.audio = new Audio();
+
         GAME_PAUSED = false;
     }
 

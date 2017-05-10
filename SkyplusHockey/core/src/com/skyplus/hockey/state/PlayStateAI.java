@@ -739,7 +739,7 @@ public class PlayStateAI extends State implements Screen {
                 puck.reLoadGame(Hockey.WITDH / 2, Hockey.HEIGHT / 2 - 100);
                 effectGood.setPosition(Hockey.WITDH / 2, 10);
                 effectGood.reset();
-                effectGoal.setPosition(Hockey.WITDH / 2, Hockey.HEIGHT / 4);
+                effectGoal.setPosition(Hockey.WITDH / 2, Hockey.HEIGHT / 3 * 2);
                 effectGoal.reset();
                 audio.getGoal().play();
             }
@@ -756,7 +756,7 @@ public class PlayStateAI extends State implements Screen {
                 puck.reLoadGame(Hockey.WITDH / 2, Hockey.HEIGHT / 2 + 100);
                 effectGood.setPosition(Hockey.WITDH / 2, Hockey.HEIGHT - 10);
                 effectGood.reset();
-                effectGoal.setPosition(Hockey.WITDH / 2, Hockey.HEIGHT / 3 * 2);
+                effectGoal.setPosition(Hockey.WITDH / 2, Hockey.HEIGHT / 4);
                 effectGoal.reset();
                 audio.getGoal().play();
             }
