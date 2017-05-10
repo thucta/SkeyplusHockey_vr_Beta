@@ -36,7 +36,6 @@ public class AIPandle extends Pandle {
     public static double SPEED_WIDTH = 20f;
     public static double SPEED_HEIGHT = 30f;
     public static float elapsed = 0.1f;
-    public static float elapsedhome = 0.5f;
     private Boolean moving = false;
     private Vector2 end = new Vector2(0, 0);
     private  Vector2d velocity ;
