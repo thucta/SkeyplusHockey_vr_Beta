@@ -98,22 +98,22 @@ public class PlayStateAI extends State implements Screen {
         background.put(Config.EDGE_RIGHT_BOTTOM, new Texture(Hockey.PATCH + "bg_right.png"));
         background.put(Config.EDGE_RIGHT_BOTTOM_LIGHT, new Texture(Hockey.PATCH + "bg_right_l.png"));
 
-        background.put(Config.EDGE_LEFT_TOP, new Texture(Hockey.PATCH + "bg_right.png"));
-        background.put(Config.EDGE_LEFT_TOP_LIGHT, new Texture(Hockey.PATCH + "bg_right_l.png"));
+        background.put(Config.EDGE_LEFT_TOP, new Texture(Hockey.PATCH + "bg_left.png"));
+        background.put(Config.EDGE_LEFT_TOP_LIGHT, new Texture(Hockey.PATCH + "bg_left_l.png"));
 
-        background.put(Config.EDGE_LEFT_BOTTOM, new Texture(Hockey.PATCH + "bg_right.png"));
-        background.put(Config.EDGE_LEFT_BOTTOM_LIGHT, new Texture(Hockey.PATCH + "bg_right_l.png"));
+        background.put(Config.EDGE_LEFT_BOTTOM, new Texture(Hockey.PATCH + "bg_left.png"));
+        background.put(Config.EDGE_LEFT_BOTTOM_LIGHT, new Texture(Hockey.PATCH + "bg_left_l.png"));
 
 
         background.put(Config.EDGE_TOP_RIGHT, new Texture(Hockey.PATCH + "bg_top.png"));
-        background.put(Config.EDGE_TOP_RIGHT_LIGHT, new Texture(Hockey.PATCH + "bg_top_light.png"));
+        background.put(Config.EDGE_TOP_RIGHT_LIGHT, new Texture(Hockey.PATCH + "bg_top_l.png"));
         background.put(Config.EDGE_TOP_LEFT, new Texture(Hockey.PATCH + "bg_top.png"));
-        background.put(Config.EDGE_TOP_LEFT_LIGHT, new Texture(Hockey.PATCH + "bg_top_light.png"));
+        background.put(Config.EDGE_TOP_LEFT_LIGHT, new Texture(Hockey.PATCH + "bg_top_l.png"));
 
-        background.put(Config.EDGE_BOTTOM_RIGHT, new Texture(Hockey.PATCH + "bg_top.png"));
-        background.put(Config.EDGE_BOTTOM_RIGHT_LIGHT, new Texture(Hockey.PATCH + "bg_top_light.png"));
-        background.put(Config.EDGE_BOTTOM_LEFT, new Texture(Hockey.PATCH + "bg_top.png"));
-        background.put(Config.EDGE_BOTTOM_LEFT_LIGHT, new Texture(Hockey.PATCH + "bg_top_light.png"));
+        background.put(Config.EDGE_BOTTOM_RIGHT, new Texture(Hockey.PATCH + "bg_bottom.png"));
+        background.put(Config.EDGE_BOTTOM_RIGHT_LIGHT, new Texture(Hockey.PATCH + "bg_bottom_l.png"));
+        background.put(Config.EDGE_BOTTOM_LEFT, new Texture(Hockey.PATCH + "bg_bottom.png"));
+        background.put(Config.EDGE_BOTTOM_LEFT_LIGHT, new Texture(Hockey.PATCH + "bg_bottom_l.png"));
 
         this.background = new BackgroundGame(Hockey.WITDH, Hockey.HEIGHT, background);
 
@@ -132,7 +132,7 @@ public class PlayStateAI extends State implements Screen {
 
         //scrore
         mapSpriteScore = new HashMap<Integer, Sprite>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 6; i++) {
             Sprite sprite = new Sprite(new Texture(Hockey.PATCH + i + ".png"));
             sprite.setSize(sprite.getWidth(), sprite.getHeight());
             mapSpriteScore.put(i, sprite);
