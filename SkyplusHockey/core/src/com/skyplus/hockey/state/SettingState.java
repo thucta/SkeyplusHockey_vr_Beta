@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.skyplus.hockey.Hockey;
+import com.skyplus.hockey.objects.CheckSoundMusic;
 import com.skyplus.hockey.objects.HockeyPreferences;
 
 /**
@@ -17,12 +18,14 @@ import com.skyplus.hockey.objects.HockeyPreferences;
 public class SettingState extends State implements Screen {
     private Texture bg;
     private Sprite check, uncheck, button_ST;
+    private CheckSoundMusic checkSoundMusic = new CheckSoundMusic();
     private HockeyPreferences pref = new HockeyPreferences();
 
     public SettingState(GameStateManager gsm) {
         super(gsm);
         Gdx.app.log("here","SettingState");
         bg = new Texture(Hockey.PATCH + "backGame.png");
+ checkSoundMusic.createCheckSoundMusic();
         check = new Sprite(new Texture(Hockey.PATCH+"check.png"));
         uncheck = new Sprite(new Texture(Hockey.PATCH+"uncheck.png"));
         check.setPosition(Hockey.WITDH*4/5, Hockey.HEIGHT/3-check.getHeight()/2);
@@ -30,7 +33,7 @@ public class SettingState extends State implements Screen {
 
         button_ST = new Sprite(new Texture(Hockey.PATCH+"buttonExit.png"));
         button_ST.rotate(360);
-        button_ST.setPosition(Hockey.WITDH/2-button_ST.getWidth()/2, Hockey.HEIGHT*2/3-button_ST.getHeight()/2);
+        button_ST.setPosition(Hockey.WITDH/2-button_ST.getWidth()/2, Hockey.HEIGHT*3/4-button_ST.getHeight()/2);
 
     }
 
@@ -54,17 +57,7 @@ public class SettingState extends State implements Screen {
 
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-                if (check.getBoundingRectangle().contains(screenX,screenY)) {
-                    if(Hockey.flagCheck) {
-                        Hockey.flagCheck = false;
-                        pref.setMusic(false);
-                        Hockey.sound.pause();
-                    }else {
-                        Hockey.flagCheck = true;
-                        pref.setMusic(true);
-                        Hockey.sound.play();
-                    }
-                }
+                checkSoundMusic.clickCheckSoundMusic(screenX,screenY);
                 if(button_ST.getBoundingRectangle().contains(screenX, screenY)){
                     gsm.set(new MenuState(gsm));
                     dispose();
@@ -108,6 +101,7 @@ public class SettingState extends State implements Screen {
         sb.draw(bg,0,0, Hockey.WITDH, Hockey.HEIGHT);
         button_ST.setFlip(false,true);
         button_ST.draw(sb);
+checkSoundMusic.drawCheckSoundMusic(sb);
 
         if(pref.getMusic()){
             check.setFlip(false,true);

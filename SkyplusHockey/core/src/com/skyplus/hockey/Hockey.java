@@ -24,7 +24,8 @@ public class Hockey extends Game {
 	public static String PATCH="";
 	public  SpriteBatch batch;
 	private GameStateManager gms;
-	public static boolean flagCheck = false;
+	public static boolean flagCheck = true;
+    public static boolean flagCheckMusic = true;
 	public static Sound sound;
 	public static DeviceAPI deviceAPI;
 

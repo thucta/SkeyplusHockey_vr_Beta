@@ -20,7 +20,9 @@ import com.skyplus.hockey.network.GameClientInterface;
 import com.skyplus.hockey.objects.AIPandle;
 import com.skyplus.hockey.objects.Audio;
 import com.skyplus.hockey.objects.BackgroundGame;
+import com.skyplus.hockey.objects.CheckSoundMusic;
 import com.skyplus.hockey.objects.Effect;
+import com.skyplus.hockey.objects.HockeyPreferences;
 import com.skyplus.hockey.objects.Pandle;
 import com.skyplus.hockey.objects.Puck;
 import com.skyplus.hockey.objects.Vector2d;
@@ -63,9 +65,12 @@ public class PlayStateAI extends State implements Screen {
     private ParticleEffect effectGoal;
 
     private Sprite button_Resume,button_NewGame, button_Exit, button_Pause;
+    private Sprite checksound, unchecksound, checkMusic,uncheckMusic, textSound, textMusic;
     private boolean GAME_PAUSED = false;
     private Sprite sprite;
     private Audio audio;
+
+
     // map diem
     public static Map<Integer, Sprite> mapSpriteScore;
 
@@ -119,14 +124,15 @@ public class PlayStateAI extends State implements Screen {
 
 
         //pause
-        button_Pause = new Sprite(new Texture(Hockey.PATCH+"buttonPause.png"));
-        button_Resume = new Sprite(new Texture(Hockey.PATCH+"buttonResume.png"));
-        button_NewGame = new Sprite(new Texture(Hockey.PATCH+"buttonNewGame.png"));
-        button_Exit = new Sprite(new Texture(Hockey.PATCH+"buttonExit.png"));
-        button_Pause.setPosition(Hockey.WITDH- button_Pause.getWidth(), Hockey.HEIGHT/2-button_Pause.getHeight()/2);
-        button_Resume.setPosition(Hockey.WITDH/ 2 - button_Resume.getWidth() / 2, Hockey.HEIGHT/ 4 - button_Resume.getHeight() / 3);
-        button_NewGame.setPosition(Hockey.WITDH / 2 - button_NewGame.getWidth() / 2, Hockey.HEIGHT/ 2 - button_NewGame.getHeight() / 2);
-        button_Exit.setPosition(Hockey.WITDH/ 2 - button_Exit.getWidth() / 2, Hockey.HEIGHT *3/ 4 - button_Exit.getHeight() / 2);
+        button_Pause = new Sprite(new Texture(Hockey.PATCH + "buttonPause.png"));
+        button_Resume = new Sprite(new Texture(Hockey.PATCH + "buttonResume.png"));
+        button_NewGame = new Sprite(new Texture(Hockey.PATCH + "buttonNewGame.png"));
+        button_Exit = new Sprite(new Texture(Hockey.PATCH + "buttonExit.png"));
+        button_Pause.setPosition(Hockey.WITDH - button_Pause.getWidth(), Hockey.HEIGHT / 2 - button_Pause.getHeight() / 2);
+
+        button_Resume.setPosition(Hockey.WITDH / 2 - button_Resume.getWidth() / 2, Hockey.HEIGHT/4 - button_Resume.getHeight() / 2);
+        button_NewGame.setPosition(Hockey.WITDH / 2 - button_NewGame.getWidth() / 2, Hockey.HEIGHT / 2 - button_NewGame.getHeight() / 2);
+        button_Exit.setPosition(Hockey.WITDH / 2 - button_Exit.getWidth() / 2, Hockey.HEIGHT * 3 / 4 - button_Exit.getHeight() / 2);
         sprite = new Sprite(background.get(Config.BACKGROUND));
 
 
@@ -312,6 +318,7 @@ public class PlayStateAI extends State implements Screen {
             button_Exit.setFlip(false,true);
             button_Exit.draw(sb);
 
+
         }
         sb.end();
     }
@@ -357,7 +364,9 @@ public class PlayStateAI extends State implements Screen {
                         Random rn = new Random();
                         int range = (int) puck.getWitdh() / 2 + 1;
                         int randomNum = rn.nextInt(range);
-                        if (puck.getY() > Hockey.HEIGHT / 2 + pandle_green.getWitdh()) {
+                        if (puck.getY() > Hockey.HEIGHT / 2 + pandle_green.getWitdh()/2) {
+                            pandle_greenAI.setElapsed(AIPandle.elapsedhome);
+                            pandle_green = pandle_greenAI;
                             if (puck.getY() < 100) {
                                 checkmoveforAIpandle(puck.getX(), Hockey.HEIGHT / 9);
                             } else {
@@ -368,6 +377,8 @@ public class PlayStateAI extends State implements Screen {
                                 }
                             }
                         } else {
+                            pandle_greenAI.setElapsed(AIPandle.elapsed);
+                            pandle_green = pandle_greenAI;
                             checkmoveforAIpandle(puck.getX(), puck.getY() + randomNum);
                         }
                         if (Intersector.overlaps(pandle_green.getBounds(), puck.getBounds())) {
@@ -379,7 +390,9 @@ public class PlayStateAI extends State implements Screen {
                         break;
                     }
                     case 2: {
-                        if (puck.getY() > Hockey.HEIGHT / 2 + pandle_green.getWitdh()) {
+                        if (puck.getY() > Hockey.HEIGHT / 2 + pandle_green.getWitdh()/2) {
+                            pandle_greenAI.setElapsed(AIPandle.elapsedhome);
+                            pandle_green = pandle_greenAI;
                             if (puck.getX() < 100) {
                                 checkmoveforAIpandle(puck.getX() + 150, Hockey.HEIGHT / 9);
                             } else {
@@ -390,6 +403,8 @@ public class PlayStateAI extends State implements Screen {
                                 }
                             }
                         } else {
+                            pandle_greenAI.setElapsed(AIPandle.elapsed);
+                            pandle_green = pandle_greenAI;
                             pandle_green.move(puck.getX() + puck.getWitdh() / 2, puck.getY() + puck.getWitdh() / 2);
                             if (Intersector.overlaps(pandle_green.getBounds(), puck.getBounds())) {
                                 float a = (float) (Math.pow(puck.getX() - centerGoal.x, 2) / Math.pow(puck.getY() - centerGoal.y, 2) + 1);
@@ -411,7 +426,9 @@ public class PlayStateAI extends State implements Screen {
                         break;
                     }
                     case 3: {
-                        if (puck.getY() > Hockey.HEIGHT / 2 + pandle_green.getWitdh()) {
+                        if (puck.getY() > Hockey.HEIGHT / 2 + pandle_green.getWitdh()/2) {
+                            pandle_greenAI.setElapsed(AIPandle.elapsedhome);
+                            pandle_green = pandle_greenAI;
                             if (puck.getX() < 100) {
                                 checkmoveforAIpandle(puck.getX() + 150, Hockey.HEIGHT / 9);
                             } else {
@@ -422,6 +439,8 @@ public class PlayStateAI extends State implements Screen {
                                 }
                             }
                         } else {
+                            pandle_greenAI.setElapsed(AIPandle.elapsed);
+                            pandle_green = pandle_greenAI;
                             double tempx = Math.abs(((pandle_green.getY() - puck.getY()) * pandle_pink.getX() + (pandle_green.getX() - puck.getX()) * pandle_pink.getX()));
                             double tempy = Math.sqrt(Math.pow((pandle_green.getY() - puck.getY()), 2) + Math.pow(pandle_green.getX() - puck.getX(), 2));
                             if ((tempx / tempy) >= (pandle_pink.getWitdh() / 2 + puck.getWitdh() / 2)) {
@@ -463,7 +482,9 @@ public class PlayStateAI extends State implements Screen {
                        /* Random rn = new Random();
                         int range = (int) puck.getWitdh() / 2 + 1;
                         int randomNum = rn.nextInt(range);
-                        if (puck.getY() > Hockey.HEIGHT / 2 + pandle_green.getWitdh()) {
+                        if (puck.getY() > Hockey.HEIGHT / 2 + pandle_green.getWitdh()/2) {
+                            pandle_greenAI.setElapsed(AIPandle.elapsedhome);
+                            pandle_green = pandle_greenAI;
                             if (puck.getY() < 100) {
                                 checkmoveforAIpandle(puck.getX(), Hockey.HEIGHT / 9);
                             } else {
@@ -474,6 +495,8 @@ public class PlayStateAI extends State implements Screen {
                                 }
                             }
                         } else {
+                            pandle_greenAI.setElapsed(AIPandle.elapsed);
+                            pandle_green = pandle_greenAI;
                             pandle_green.move(puck.getX(), puck.getY() + randomNum);
                         }*/
                             pandle_green.move(puck.getX() + puck.getWitdh() / 2, puck.getY() + puck.getWitdh() / 2);
@@ -600,7 +623,7 @@ public class PlayStateAI extends State implements Screen {
             screenY = (int) Math.min(Math.max(screenY, pandle_green.getHeight() / 2 + background.getMapEdge().get(Config.EDGE_TOP_RIGHT).getHeight() - 1),
                     Hockey.HEIGHT / 2 - pandle_green.getHeight() / 2);
             double distance = Math.sqrt(Vector2.dst2(puck.getX(), puck.getY(), screenX, screenY)) +10;
-               Gdx.app.log("distance",":"+distance);
+           
             if (distance <= (puck.getBounds().radius + pandle_green.getBounds().radius)) {
                 Double x = (screenX - puck.getX()) * (pandle_green.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getX();
                 Double y = (screenY - puck.getY()) * (pandle_green.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getY();
@@ -625,7 +648,7 @@ public class PlayStateAI extends State implements Screen {
                 Hockey.WITDH - pandle_pink.getWitdh() / 2 - (background.getMapEdge().get(Config.EDGE_LEFT_BOTTOM).getWitdh() - 1));
         screenY = (int) Math.min(Math.max(screenY, Hockey.HEIGHT / 2 + pandle_pink.getHeight() / 2),
                 Hockey.HEIGHT - pandle_pink.getHeight() / 2 - (background.getMapEdge().get(Config.EDGE_BOTTOM_RIGHT).getHeight() - 1));
-        double distance = Math.sqrt(Vector2.dst2(puck.getX(), puck.getY(), screenX,screenY))+2;
+        double distance = Math.sqrt(Vector2.dst2(puck.getX(), puck.getY(), screenX,screenY))+7;
         if (distance < (puck.getBounds().radius + pandle_pink.getBounds().radius) ) {
 
             Double x = (screenX - puck.getX()) * (pandle_pink.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getX();

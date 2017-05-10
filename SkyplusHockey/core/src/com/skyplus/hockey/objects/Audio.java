@@ -19,7 +19,7 @@ public class Audio {
 public Audio(){
 
     pref = new HockeyPreferences();
-    if(pref.getMusic()){
+    if(pref.getSound()){
     edgeHitSound = Gdx.audio.newSound(Gdx.files.internal("hit_paddle1.mp3"));
     pandleHit = Gdx.audio.newSound(Gdx.files.internal("puck_hit1.mp3"));
     click = Gdx.audio.newSound(Gdx.files.internal("menu_select.mp3"));

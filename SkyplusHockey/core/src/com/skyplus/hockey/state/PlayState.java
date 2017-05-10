@@ -16,7 +16,9 @@ import com.skyplus.hockey.config.Config;
 import com.skyplus.hockey.network.GameClientInterface;
 import com.skyplus.hockey.objects.Audio;
 import com.skyplus.hockey.objects.BackgroundGame;
+import com.skyplus.hockey.objects.CheckSoundMusic;
 import com.skyplus.hockey.objects.Effect;
+import com.skyplus.hockey.objects.HockeyPreferences;
 import com.skyplus.hockey.objects.Pandle;
 import com.skyplus.hockey.objects.Puck;
 
@@ -42,6 +44,7 @@ public class PlayState extends State implements Screen {
     private ParticleEffect effectGood;
     private ParticleEffect effectPuck;
     private ParticleEffect effectGoal;
+    private ParticleEffect effectGoal2;
 
     private Sprite button_Resume, button_NewGame, button_Exit, button_Pause;
     private boolean GAME_PAUSED = false;
@@ -101,9 +104,13 @@ public class PlayState extends State implements Screen {
         button_NewGame = new Sprite(new Texture(Hockey.PATCH + "buttonNewGame.png"));
         button_Exit = new Sprite(new Texture(Hockey.PATCH + "buttonExit.png"));
         button_Pause.setPosition(Hockey.WITDH - button_Pause.getWidth()-this.background.getMapEdge().get(Config.EDGE_LEFT_BOTTOM).getWitdh()- 5*(Hockey.WITDH/Config.SCREEN_MAIN.x) , Hockey.HEIGHT / 2 - button_Pause.getHeight() / 2);
-        button_Resume.setPosition(Hockey.WITDH / 2 - button_Resume.getWidth() / 2, Hockey.HEIGHT / 4 - button_Resume.getHeight() / 3);
-        button_NewGame.setPosition(Hockey.WITDH / 2 - button_NewGame.getWidth() / 2, Hockey.HEIGHT / 2 - button_NewGame.getHeight() / 2);
-        button_Exit.setPosition(Hockey.WITDH / 2 - button_Exit.getWidth() / 2, Hockey.HEIGHT * 3 / 4 - button_Exit.getHeight() / 2);
+
+        button_Resume.setPosition(Hockey.WITDH / 2 - button_Resume.getWidth() / 2, Hockey.HEIGHT/2 - button_Resume.getHeight() / 2);
+        button_NewGame.setPosition(Hockey.WITDH / 2 - button_NewGame.getWidth() / 2, Hockey.HEIGHT *2/ 3 - button_NewGame.getHeight() / 2);
+        button_Exit.setPosition(Hockey.WITDH / 2 - button_Exit.getWidth() / 2, Hockey.HEIGHT * 5 / 6 - button_Exit.getHeight() / 2);
+
+
+
         sprite = new Sprite(background.get(Config.BACKGROUND));
         sprite.setFlip(false,true);
         //scrore
@@ -128,10 +135,17 @@ public class PlayState extends State implements Screen {
         effectGoal = fxGoal.create();
         effectGoal.setFlip(false,true);
 
-        Hockey.scaleParticleEffect(2.4f,effectGood);
+
+        Effect fxGoal2 = new Effect("goal");
+        effectGoal2 = fxGoal2.create();
+        effectGoal2.setFlip(true,false);
+        //ve hieu ung//
+//        rotateBy(-50);
+ Hockey.scaleParticleEffect(2.4f,effectGood);
 
         //audio
-        audio = new Audio();
+
+       audio = new Audio();
 
     }
 
@@ -225,6 +239,7 @@ public class PlayState extends State implements Screen {
             effectGood.update(dt);
             effectPuck.update(dt);
             effectGoal.update(dt);
+            effectGoal2.update(dt);
         }
 
     }
@@ -249,6 +264,7 @@ public class PlayState extends State implements Screen {
             effectGood.draw(sb);
             effectPuck.draw(sb);
             effectGoal.draw(sb);
+            effectGoal2.draw(sb);
             button_Pause.draw(sb);
             drawScores(sb);
 
@@ -263,7 +279,7 @@ public class PlayState extends State implements Screen {
             effectGood.draw(sb);
             effectPuck.draw(sb);
             effectGoal.draw(sb);
-
+            effectGoal2.draw(sb);
             puck.draw(sb);
             pandle_pink.draw(sb);
             pandle_green.draw(sb);
@@ -274,6 +290,8 @@ public class PlayState extends State implements Screen {
             button_NewGame.draw(sb);
             button_Exit.setFlip(false, true);
             button_Exit.draw(sb);
+
+
 
         }
         sb.end();
@@ -361,9 +379,13 @@ public class PlayState extends State implements Screen {
                 puck.reLoadGame(Hockey.WITDH / 2, Hockey.HEIGHT / 2 - 100);
                 effectGood.setPosition(Hockey.WITDH / 2, 10);
                 effectGood.reset();
-                effectGoal.setPosition(Hockey.WITDH / 2, Hockey.HEIGHT / 4);
+
+
+                effectGoal.setPosition(Hockey.WITDH / 2, Hockey.HEIGHT / 3 * 2);
                 effectGoal.reset();
+
                 audio.getGoal().play();
+                Hockey.deviceAPI.vibRate(Config.miliSecond);
             }
 
         } else if (puck.getY() - puck.getHeight() / 2 > Hockey.HEIGHT) {
@@ -378,9 +400,10 @@ public class PlayState extends State implements Screen {
                 puck.reLoadGame(Hockey.WITDH / 2, Hockey.HEIGHT / 2 + 100);
                 effectGood.setPosition(Hockey.WITDH / 2, Hockey.HEIGHT - 10);
                 effectGood.reset();
-                effectGoal.setPosition(Hockey.WITDH / 2, Hockey.HEIGHT / 3 * 2);
-               effectGoal.reset();
+                effectGoal2.setPosition(Hockey.WITDH / 2, Hockey.HEIGHT / 4);
+                effectGoal2.reset();
                 audio.getGoal().play();
+                Hockey.deviceAPI.vibRate(Config.miliSecond);
             }
         }
     }
@@ -441,6 +464,7 @@ public class PlayState extends State implements Screen {
 
     @Override
     public void resume() {
+       this.audio = new Audio();
         GAME_PAUSED = false;
     }
 

@@ -12,6 +12,7 @@ public class HockeyPreferences {
     private Preferences preferences;
 
     private static final String PREF_MUSIC = "music";
+    private static final String PREF_SOUND = "sound";
     private static final String PREF_SCORE= "score";
 
     public HockeyPreferences() {
@@ -33,10 +34,16 @@ public class HockeyPreferences {
         getPrefs().putBoolean(PREF_MUSIC, music);
         getPrefs().flush();
     }
-
+    public void setSound(Boolean sound){
+        getPrefs().putBoolean(PREF_SOUND, sound);
+        getPrefs().flush();
+    }
 
     public boolean getMusic() {
         return getPrefs().getBoolean(PREF_MUSIC,true);
+    }
+    public boolean getSound(){
+        return getPrefs().getBoolean(PREF_SOUND,true);
     }
     public int getScore() {
         return getPrefs().getInteger(PREF_SCORE);
