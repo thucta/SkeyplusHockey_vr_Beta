@@ -24,8 +24,8 @@ public class SettingState extends State implements Screen {
     public SettingState(GameStateManager gsm) {
         super(gsm);
         Gdx.app.log("here","SettingState");
-        bg = new Texture(Hockey.PATCH + "backGame.png");
- checkSoundMusic.createCheckSoundMusic();
+        bg = new Texture(Hockey.PATCH + "backgroundMenu.png");
+    checkSoundMusic.createCheckSoundMusic();
         check = new Sprite(new Texture(Hockey.PATCH+"check.png"));
         uncheck = new Sprite(new Texture(Hockey.PATCH+"uncheck.png"));
         check.setPosition(Hockey.WITDH*4/5, Hockey.HEIGHT/3-check.getHeight()/2);

@@ -33,8 +33,8 @@ public class AIPandle extends Pandle {
     /*
      Các biến di chuyển
    */
-    public static double SPEED_WIDTH = 80f;
-    public static double SPEED_HEIGHT = 90f;
+    public static double SPEED_WIDTH = 60f;
+    public static double SPEED_HEIGHT = 80f;
     public static float elapsed = 0.15f;
     public static float elapsedhome = 0.5f;
     private Boolean moving = false;

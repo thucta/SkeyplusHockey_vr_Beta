@@ -334,15 +334,15 @@ public class PlayState extends State implements Screen {
                     Hockey.WITDH - pandle_green.getWitdh() / 2 - (background.getMapEdge().get(Config.EDGE_LEFT_TOP).getWitdh() - 1));
             screenY = (int) Math.min(Math.max(screenY, pandle_green.getHeight() / 2 + background.getMapEdge().get(Config.EDGE_TOP_RIGHT).getHeight() - 1),
                     Hockey.HEIGHT / 2 - pandle_green.getHeight() / 2);
-//            double distance = Math.sqrt(Vector2.dst2(puck.getX(), puck.getY(), screenX,screenY))+2;
-//
-//            if (distance < (puck.getBounds().radius + pandle_green.getBounds().radius) ) {
-//                Double x = (screenX - puck.getX()) * (pandle_green.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getX();
-//                Double y = (screenY - puck.getY()) * (pandle_green.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getY();
-//
-//               screenX = x.floatValue();
-//               screenY = y.floatValue();
-//            }
+            double distance = Math.sqrt(Vector2.dst2(puck.getX(), puck.getY(), screenX,screenY))+2;
+
+            if (distance < (puck.getBounds().radius + pandle_green.getBounds().radius) ) {
+                Double x = (screenX - puck.getX()) * (pandle_green.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getX();
+                Double y = (screenY - puck.getY()) * (pandle_green.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getY();
+
+               screenX = x.floatValue();
+               screenY = y.floatValue();
+            }
 
            pandle_green.move(screenX, screenY);
         } else {
@@ -351,13 +351,13 @@ public class PlayState extends State implements Screen {
                     Hockey.WITDH - pandle_pink.getWitdh() / 2 - (background.getMapEdge().get(Config.EDGE_LEFT_BOTTOM).getWitdh() - 1));
             screenY = (int) Math.min(Math.max(screenY, Hockey.HEIGHT / 2 + pandle_pink.getHeight() / 2),
                     Hockey.HEIGHT - pandle_pink.getHeight() / 2 - (background.getMapEdge().get(Config.EDGE_BOTTOM_RIGHT).getHeight() - 1));
-//            double distance = Math.sqrt(Vector2.dst2(puck.getX(), puck.getY(), screenX,screenY))+2;
-//            if (distance < (puck.getBounds().radius + pandle_green.getBounds().radius) ) {
-//
-//               Double x = (screenX - puck.getX()) * (pandle_pink.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getX();
-//                Double y = (screenY - puck.getY()) * (pandle_pink.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getY();screenX = x.floatValue();
-//               screenY = y.floatValue();
-//            }
+            double distance = Math.sqrt(Vector2.dst2(puck.getX(), puck.getY(), screenX,screenY))+2;
+            if (distance < (puck.getBounds().radius + pandle_green.getBounds().radius) ) {
+
+               Double x = (screenX - puck.getX()) * (pandle_pink.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getX();
+                Double y = (screenY - puck.getY()) * (pandle_pink.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getY();screenX = x.floatValue();
+               screenY = y.floatValue();
+            }
             pandle_pink.move(screenX, screenY);
 
         }
@@ -403,7 +403,7 @@ public class PlayState extends State implements Screen {
                 effectGoal2.setPosition(Hockey.WITDH / 2, Hockey.HEIGHT / 4);
                 effectGoal2.reset();
                 audio.getGoal().play();
-                Hockey.deviceAPI.vibRate(Config.miliSecond);
+               Hockey.deviceAPI.vibRate(Config.miliSecond);
             }
         }
     }
