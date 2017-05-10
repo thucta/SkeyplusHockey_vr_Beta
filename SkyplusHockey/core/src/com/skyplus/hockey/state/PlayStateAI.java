@@ -365,8 +365,8 @@ public class PlayStateAI extends State implements Screen {
                         int range = (int) puck.getWitdh() / 2 + 1;
                         int randomNum = rn.nextInt(range);
                         if (puck.getY() > Hockey.HEIGHT / 2 +puck.getWitdh()/2) {
-                            pandle_greenAI.setElapsed(AIPandle.elapsedhome);
-                            pandle_green = pandle_greenAI;
+                            /*pandle_greenAI.setElapsed(AIPandle.elapsedhome);
+                            pandle_green = pandle_greenAI;*/
                             if (puck.getY() < 100) {
                                 checkmoveforAIpandle(puck.getX(), Hockey.HEIGHT / 9);
                             } else {
@@ -393,8 +393,8 @@ public class PlayStateAI extends State implements Screen {
                     }
                     case 2: {
                         if (puck.getY() > Hockey.HEIGHT / 2 + puck.getWitdh()/2) {
-                            pandle_greenAI.setElapsed(AIPandle.elapsedhome);
-                            pandle_green = pandle_greenAI;
+                          /*  pandle_greenAI.setElapsed(AIPandle.elapsedhome);
+                            pandle_green = pandle_greenAI;*/
                             if (puck.getX() < 100) {
                                 checkmoveforAIpandle(puck.getX() + 150, Hockey.HEIGHT / 9);
                             } else {
@@ -431,8 +431,8 @@ public class PlayStateAI extends State implements Screen {
                     }
                     case 3: {
                         if (puck.getY() > Hockey.HEIGHT / 2 + pandle_green.getWitdh()/2) {
-                            pandle_greenAI.setElapsed(AIPandle.elapsedhome);
-                            pandle_green = pandle_greenAI;
+                         /*   pandle_greenAI.setElapsed(AIPandle.elapsedhome);
+                            pandle_green = pandle_greenAI;*/
                             if (puck.getX() < 100) {
                                 checkmoveforAIpandle(puck.getX() + 150, Hockey.HEIGHT / 9);
                             } else {
