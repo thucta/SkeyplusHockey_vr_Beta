@@ -25,11 +25,7 @@ public class SettingState extends State implements Screen {
         super(gsm);
         Gdx.app.log("here","SettingState");
         bg = new Texture(Hockey.PATCH + "backgroundMenu.png");
-    checkSoundMusic.createCheckSoundMusic();
-        check = new Sprite(new Texture(Hockey.PATCH+"check.png"));
-        uncheck = new Sprite(new Texture(Hockey.PATCH+"uncheck.png"));
-        check.setPosition(Hockey.WITDH*4/5, Hockey.HEIGHT/3-check.getHeight()/2);
-        uncheck.setPosition(Hockey.WITDH*4/5, Hockey.HEIGHT/3-uncheck.getHeight()/2);
+        checkSoundMusic.createCheckSoundMusic();
 
         button_ST = new Sprite(new Texture(Hockey.PATCH+"buttonExit.png"));
         button_ST.rotate(360);
@@ -101,15 +97,9 @@ public class SettingState extends State implements Screen {
         sb.draw(bg,0,0, Hockey.WITDH, Hockey.HEIGHT);
         button_ST.setFlip(false,true);
         button_ST.draw(sb);
-checkSoundMusic.drawCheckSoundMusic(sb);
+        checkSoundMusic.drawCheckSoundMusic(sb);
 
-        if(pref.getMusic()){
-            check.setFlip(false,true);
-            check.draw(sb);
-        }else {
-            uncheck.setFlip(false,true);
-            uncheck.draw(sb);
-        }
+
         sb.end();
     }
 
