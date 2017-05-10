@@ -569,12 +569,12 @@ public class PlayStateAI extends State implements Screen {
 
                     checkmoveforAIpandle(Hockey.WITDH / 2, pandle_greenAI.getHeight());
                     bound--;
-                    puck.setPosition(puck.getX()+5, puck.getY()+10);
-//                    if (pandle_green.getX() == Hockey.WITDH / 2)
-//
-//                    {
-//                        bound =0;
-//                    }
+                    puck.setPosition(puck.getX()+5, puck.getY()+5);
+                   /* if (pandle_green.getX() == Hockey.WITDH / 2)
+
+                    {
+                        bound =0;
+                    }*/
                     if(bound==51)
                     {
                         bound=0;
