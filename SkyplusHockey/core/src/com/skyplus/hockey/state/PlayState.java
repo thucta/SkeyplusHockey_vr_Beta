@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.skyplus.hockey.Hockey;
@@ -16,7 +15,6 @@ import com.skyplus.hockey.config.Config;
 import com.skyplus.hockey.network.GameClientInterface;
 import com.skyplus.hockey.objects.Audio;
 import com.skyplus.hockey.objects.BackgroundGame;
-import com.skyplus.hockey.objects.CheckSoundMusic;
 import com.skyplus.hockey.objects.Effect;
 import com.skyplus.hockey.objects.HockeyPreferences;
 import com.skyplus.hockey.objects.Pandle;
@@ -50,6 +48,11 @@ public class PlayState extends State implements Screen {
     private boolean GAME_PAUSED = false;
     private Sprite sprite;
     private Audio audio;
+
+    // win
+    private Sprite button_Again, button_Result, button_Result2;
+    private boolean flagWin = false;
+
     // map diem
     public static Map<Integer, Sprite> mapSpriteScore;
 
@@ -105,14 +108,20 @@ public class PlayState extends State implements Screen {
         button_Exit = new Sprite(new Texture(Hockey.PATCH + "buttonExit.png"));
         button_Pause.setPosition(Hockey.WITDH - button_Pause.getWidth()-this.background.getMapEdge().get(Config.EDGE_LEFT_BOTTOM).getWitdh()- 5*(Hockey.WITDH/Config.SCREEN_MAIN.x) , Hockey.HEIGHT / 2 - button_Pause.getHeight() / 2);
 
-        button_Resume.setPosition(Hockey.WITDH / 2 - button_Resume.getWidth() / 2, Hockey.HEIGHT/2 - button_Resume.getHeight() / 2);
-        button_NewGame.setPosition(Hockey.WITDH / 2 - button_NewGame.getWidth() / 2, Hockey.HEIGHT *2/ 3 - button_NewGame.getHeight() / 2);
-        button_Exit.setPosition(Hockey.WITDH / 2 - button_Exit.getWidth() / 2, Hockey.HEIGHT * 5 / 6 - button_Exit.getHeight() / 2);
+        button_Resume.setPosition(Hockey.WITDH / 2 - button_Resume.getWidth() / 2, Hockey.HEIGHT/4 - button_Resume.getHeight() / 2);
+        button_NewGame.setPosition(Hockey.WITDH / 2 - button_NewGame.getWidth() / 2, Hockey.HEIGHT/ 2 - button_NewGame.getHeight() / 2);
+        button_Exit.setPosition(Hockey.WITDH / 2 - button_Exit.getWidth() / 2, Hockey.HEIGHT * 3 / 4 - button_Exit.getHeight() / 2);
 
 
 
         sprite = new Sprite(background.get(Config.BACKGROUND));
         sprite.setFlip(false,true);
+        //Win
+        button_Again = new Sprite(new Texture(Hockey.PATCH+"buttonAgain.png"));
+        button_Again.setPosition(Hockey.WITDH/2-button_Again.getWidth()/2, Hockey.HEIGHT*2/5-button_Again.getHeight()/2);
+
+
+
         //scrore
         mapSpriteScore = new HashMap<Integer, Sprite>();
         for (int i = 0; i < 6; i++) {
@@ -192,6 +201,16 @@ public class PlayState extends State implements Screen {
                         pause();
                     }
                 }
+                if(flagWin){
+                    if (button_Again.getBoundingRectangle().contains(screenX,screenY)) {
+                        gsm.set(new PlayState(gsm));
+                        dispose();
+                    }
+                    else if (button_NewGame.getBoundingRectangle().contains(screenX,screenY)) {
+                        gsm.set(new MenuState(gsm));
+                        dispose();
+                    }
+                }
                 return false;
             }
 
@@ -267,13 +286,13 @@ public class PlayState extends State implements Screen {
             effectGoal2.draw(sb);
             button_Pause.draw(sb);
             drawScores(sb);
-
+            sb.end();
         } else {
 
             sb.setProjectionMatrix(cam.combined);
             sb.begin();
 
-            sprite.setAlpha(0.9f);
+            sprite.setAlpha(0.6f);
 
             puck.drawEffect(sb);
             effectGood.draw(sb);
@@ -290,11 +309,38 @@ public class PlayState extends State implements Screen {
             button_NewGame.draw(sb);
             button_Exit.setFlip(false, true);
             button_Exit.draw(sb);
+            sb.end();
 
 
 
         }
-        sb.end();
+        if(flagWin){
+            Gdx.gl.glClearColor(0, 0, 0, 0f);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            sb.setProjectionMatrix(cam.combined);
+            sb.begin();
+            sprite.setAlpha(0.6f);
+            puck.drawEffect(sb);
+            effectGood.draw(sb);
+            effectPuck.draw(sb);
+            effectGoal.draw(sb);
+
+            puck.draw(sb);
+            pandle_pink.draw(sb);
+            pandle_green.draw(sb);
+            sprite.draw(sb);
+            
+            button_Result.setFlip(true,false);
+            button_Result.draw(sb);
+            button_Again.setFlip(false,true);
+            button_Again.draw(sb);
+            button_NewGame.setFlip(false,true);
+            button_NewGame.draw(sb);
+            button_Result2.setFlip(false,true);
+            button_Result2.draw(sb);
+            sb.end();
+        }
+
     }
 
 
@@ -372,8 +418,8 @@ public class PlayState extends State implements Screen {
             pandle_pink.setScore();
             if (pandle_pink.getScore() == 5) {
                 audio.getWin().play();
-                gsm.set(new WinState(gsm, "lose","win"));
-                dispose();
+                createResult("lose", "win");
+                flagWin = true;
             } else {
                 reLoad();
                 puck.reLoadGame(Hockey.WITDH / 2, Hockey.HEIGHT / 2 - 100);
@@ -393,7 +439,8 @@ public class PlayState extends State implements Screen {
             pandle_green.setScore();
             if (pandle_green.getScore() == 5) {
                 audio.getLose().play();
-                gsm.set(new WinState(gsm, "win","lose"));
+                createResult("win","lose");
+                flagWin = true;
 
             } else {
                 reLoad();
@@ -407,6 +454,15 @@ public class PlayState extends State implements Screen {
             }
         }
     }
+
+    private void createResult(java.lang.String kq, String kq2) {
+        button_NewGame.setPosition(Hockey.WITDH/2-button_NewGame.getWidth()/2, Hockey.HEIGHT*3/5-button_NewGame.getHeight()/2);
+        button_Result = new Sprite(new Texture(Hockey.PATCH +kq+".png"));
+        button_Result2 = new Sprite(new Texture(Hockey.PATCH +kq2+".png"));
+        button_Result.setPosition(Hockey.WITDH/2 - button_Result.getWidth()/2, Hockey.HEIGHT/5- button_Result.getHeight()/2);
+        button_Result2.setPosition(Hockey.WITDH/2 - button_Result2.getWidth()/2, Hockey.HEIGHT*4/5- button_Result2.getHeight()/2);
+    }
+
 
     private void reLoad() {
         pandle_pink.reLoadGame(Hockey.WITDH / 2, Hockey.HEIGHT - pandle_pink.getHeight());
@@ -425,6 +481,7 @@ public class PlayState extends State implements Screen {
         sprite.setPosition(Hockey.WITDH - 100 *(Hockey.WITDH/Config.SCREEN_MAIN.x), Hockey.HEIGHT / 2 + (100*(Hockey.HEIGHT/Config.SCREEN_MAIN.y) - sprite.getHeight()));
         sprite.draw(sb);
     }
+
 
     public Pandle getPandle_pink() {
         return pandle_pink;

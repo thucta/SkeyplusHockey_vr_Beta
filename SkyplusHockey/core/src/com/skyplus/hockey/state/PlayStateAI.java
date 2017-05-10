@@ -74,6 +74,11 @@ public class PlayStateAI extends State implements Screen {
     // map diem
     public static Map<Integer, Sprite> mapSpriteScore;
 
+    //win
+    private Sprite button_Again, button_Result;
+    private boolean flagWin = false;
+
+
     /*
         xu ly game qua mang
      */
@@ -134,6 +139,10 @@ public class PlayStateAI extends State implements Screen {
         button_NewGame.setPosition(Hockey.WITDH / 2 - button_NewGame.getWidth() / 2, Hockey.HEIGHT / 2 - button_NewGame.getHeight() / 2);
         button_Exit.setPosition(Hockey.WITDH / 2 - button_Exit.getWidth() / 2, Hockey.HEIGHT * 3 / 4 - button_Exit.getHeight() / 2);
         sprite = new Sprite(background.get(Config.BACKGROUND));
+
+        //win
+        button_Again = new Sprite(new Texture(Hockey.PATCH+"buttonAgain.png"));
+        button_Again.setPosition(Hockey.WITDH/2-button_Again.getWidth()/2, Hockey.HEIGHT/2-button_Again.getHeight()/2);
 
 
         //scrore
@@ -211,6 +220,17 @@ public class PlayStateAI extends State implements Screen {
                 }else {
                     if(button_Pause.getBoundingRectangle().contains(screenX,screenY)){
                         pause();
+                    }
+                }
+                if(flagWin){
+                    if (button_Again.getBoundingRectangle().contains(screenX,screenY)) {
+                        gsm.set(new PlayStateAI(gsm,PlayStateAI.playmode));
+                        dispose();
+
+                    }
+                    else if (button_NewGame.getBoundingRectangle().contains(screenX,screenY)) {
+                        gsm.set(new MenuState(gsm));
+                        dispose();
                     }
                 }
 
@@ -294,6 +314,7 @@ public class PlayStateAI extends State implements Screen {
             effectGoal.draw(sb);
             button_Pause.draw(sb);
         drawScores(sb);
+            sb.end();
     }else {
             Gdx.gl.glClearColor(0,0,0,0f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -317,10 +338,36 @@ public class PlayStateAI extends State implements Screen {
             button_NewGame.draw(sb);
             button_Exit.setFlip(false,true);
             button_Exit.draw(sb);
+            sb.end();
 
 
         }
-        sb.end();
+        if(flagWin){
+            Gdx.gl.glClearColor(0, 0, 0, 0f);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            sb.setProjectionMatrix(cam.combined);
+            sb.begin();
+            sprite.setAlpha(0.6f);
+            puck.drawEffect(sb);
+            effectGood.draw(sb);
+            effectPuck.draw(sb);
+            effectGoal.draw(sb);
+
+            puck.draw(sb);
+            pandle_pink.draw(sb);
+            pandle_green.draw(sb);
+            sprite.draw(sb);
+
+            button_Result.setFlip(false,true);
+            button_Result.draw(sb);
+            button_Again.setFlip(false,true);
+            button_Again.draw(sb);
+            button_NewGame.setFlip(false,true);
+            button_NewGame.draw(sb);
+
+            sb.end();
+        }
+
     }
 
 
@@ -569,12 +616,12 @@ public class PlayStateAI extends State implements Screen {
 
                     checkmoveforAIpandle(Hockey.WITDH / 2, pandle_greenAI.getHeight());
                     bound--;
-                    puck.setPosition(puck.getX()+5, puck.getY()+5);
-                   /* if (pandle_green.getX() == Hockey.WITDH / 2)
-
-                    {
-                        bound =0;
-                    }*/
+                    puck.setPosition(puck.getX()+5, puck.getY()+10);
+//                    if (pandle_green.getX() == Hockey.WITDH / 2)
+//
+//                    {
+//                        bound =0;
+//                    }
                     if(bound==51)
                     {
                         bound=0;
@@ -685,8 +732,8 @@ public class PlayStateAI extends State implements Screen {
             pandle_pink.setScore();
             if (pandle_pink.getScore() == 5) {
                 audio.getWin().play();
-                gsm.set(new WinState(gsm, "win","null"));
-                dispose();
+                createResult("win");
+                flagWin = true;
             } else {
                 reLoad();
                 puck.reLoadGame(Hockey.WITDH / 2, Hockey.HEIGHT / 2 - 100);
@@ -702,8 +749,8 @@ public class PlayStateAI extends State implements Screen {
 
             if (pandle_green.getScore() == 5) {
                 audio.getLose().play();
-                gsm.set(new WinState(gsm, "lose","null"));
-
+                createResult("lose");
+                flagWin = true;
             } else {
                 reLoad();
                 puck.reLoadGame(Hockey.WITDH / 2, Hockey.HEIGHT / 2 + 100);
@@ -845,5 +892,10 @@ public class PlayStateAI extends State implements Screen {
             groundShape.dispose();
         }
         return  world;
+    }
+    private void createResult(String kq) {
+        button_Result = new Sprite(new Texture(Hockey.PATCH +kq+".png"));
+        button_Result.setPosition(Hockey.WITDH/2 - button_Result.getWidth()/2, Hockey.HEIGHT/4- button_Result.getHeight()/2);
+        button_NewGame.setPosition(Hockey.WITDH/2-button_NewGame.getWidth()/2, Hockey.HEIGHT*3/4-button_NewGame.getHeight()/2);
     }
 }

@@ -18,7 +18,7 @@ public class MenuState extends State implements Screen{
 
 
     private Texture bg;
-    private Sprite button_PC,button_PP,button_ST,button_Exit, button_About;
+    private Sprite button_PC,button_PP,button_ST,button_Exit, button_About, logo;
 
 private  Audio audio;
 
@@ -28,18 +28,21 @@ private  Audio audio;
         super(gsm);
         Gdx.app.log("here","MenuState");
         bg = new Texture(Hockey.PATCH+"backgroundMenu.png");
+        logo = new Sprite(new Texture(Hockey.PATCH+"logoSky.png"));
         button_PC = new Sprite(new Texture(Hockey.PATCH+"buttonPC.png"));
         button_PP = new Sprite(new Texture(Hockey.PATCH+"buttonPP.png"));
         button_ST = new Sprite(new Texture(Hockey.PATCH+"buttonST.png"));
         button_Exit = new Sprite(new Texture(Hockey.PATCH+"buttonExit1.png"));
         button_About = new Sprite(new Texture(Hockey.PATCH+"buttonAbout.png"));
         float width = Hockey.WITDH/2-button_PP.getWidth()/2;
+        logo.setSize(150,150);
 
-        button_PC.setPosition(width, Hockey.HEIGHT/5-button_PC.getHeight()/2);
-        button_PP.setPosition(width, Hockey.HEIGHT/3-button_PP.getHeight()/2 );
-        button_ST.setPosition(width, Hockey.HEIGHT/2-button_ST.getHeight()/2);
-        button_About.setPosition(width, Hockey.HEIGHT*2/3-button_ST.getHeight()/2);
-        button_Exit.setPosition(width, Hockey.HEIGHT*5/6-button_ST.getHeight()/2);
+        logo.setPosition(Hockey.WITDH/2-logo.getWidth()/2,Hockey.HEIGHT/7 - logo.getHeight()/2);
+        button_PC.setPosition(width, Hockey.HEIGHT*2/7-button_PC.getHeight()/2);
+        button_PP.setPosition(width, Hockey.HEIGHT*3/7-button_PP.getHeight()/2 );
+        button_ST.setPosition(width, Hockey.HEIGHT*4/7-button_ST.getHeight()/2);
+        button_About.setPosition(width, Hockey.HEIGHT*5/7-button_ST.getHeight()/2);
+        button_Exit.setPosition(width, Hockey.HEIGHT*6/7-button_ST.getHeight()/2);
 
 audio = new Audio();
 
@@ -126,6 +129,8 @@ audio = new Audio();
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         sb.draw(bg,0,0, Hockey.WITDH, Hockey.HEIGHT);
+        logo.setFlip(false,true);
+        logo.draw(sb);
         button_PP.setFlip(false,true);
         button_PP.draw(sb);
         button_ST.setFlip(false,true);
