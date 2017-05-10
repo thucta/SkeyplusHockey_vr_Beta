@@ -22,6 +22,12 @@ import java.util.Map;
 public class BackgroundGame {
 
     private Sprite bg;
+    private Sprite goc0;
+    private Sprite goc1;
+    private Sprite goc2;
+    private Sprite goc3;
+    private Sprite noi_r;
+    private Sprite noi_l;
     private Map<String,Edge> mapEdge;
 
     public BackgroundGame(){
@@ -30,11 +36,34 @@ public class BackgroundGame {
     public BackgroundGame(int widthScreen, int hieghtScreen, Map<String,Texture> backgroud) {
 
         bg = new Sprite(backgroud.get(Config.BACKGROUND));
+        bg.setFlip(false,true);
         bg.setRegionWidth(widthScreen);
         bg.setRegionHeight(hieghtScreen);
         bg.setPosition(0, 0);
-        mapEdge = new HashMap<String, Edge>();
 
+        goc0 =new Sprite(new Texture(Hockey.PATCH+"goc0.png"));
+        goc0.setPosition(0,0);
+        goc0.setFlip(false,true);
+        goc1 =new Sprite(new Texture(Hockey.PATCH+"goc1.png"));
+        goc1.setPosition(Hockey.WITDH-goc0.getWidth(),0);
+        goc1.setFlip(false,true);
+        goc2 =new Sprite(new Texture(Hockey.PATCH+"goc2.png"));
+        goc2.setPosition(Hockey.WITDH-goc2.getWidth(), Hockey.HEIGHT-goc2.getHeight());
+        goc2.setFlip(false,true);
+        goc3 =new Sprite(new Texture(Hockey.PATCH+"goc3.png"));
+        goc3.setPosition(0,Hockey.HEIGHT-goc3.getHeight());
+        goc3.setFlip(false,true);
+
+        noi_r =new Sprite(new Texture(Hockey.PATCH+"noi_r.png"));
+        noi_r.setPosition(0,Hockey.HEIGHT/2 - noi_r.getHeight()/2);
+        noi_r.setFlip(false,true);
+
+        noi_l =new Sprite(new Texture(Hockey.PATCH+"noi_l.png"));
+        noi_l.setPosition(Hockey.WITDH - noi_l.getWidth(),Hockey.HEIGHT/2 - noi_l.getHeight()/2);
+        noi_l.setFlip(false,true);
+        noi_l.setFlip(false,true);
+
+        mapEdge = new HashMap<String, Edge>();
         mapEdge.put(Config.EDGE_RIGHT_TOP, new Edge(0, 0, backgroud.get(Config.EDGE_RIGHT_TOP), backgroud.get(Config.EDGE_RIGHT_TOP_LIGHT)));
         mapEdge.put(Config.EDGE_RIGHT_BOTTOM, new Edge(0, Hockey.HEIGHT / 2, backgroud.get(Config.EDGE_RIGHT_BOTTOM), backgroud.get(Config.EDGE_RIGHT_BOTTOM_LIGHT)));
         mapEdge.put(Config.EDGE_LEFT_TOP, new Edge(widthScreen - backgroud.get(Config.EDGE_LEFT_TOP).getWidth(), 0, backgroud.get(Config.EDGE_LEFT_TOP), backgroud.get(Config.EDGE_LEFT_TOP_LIGHT)));
@@ -59,6 +88,7 @@ public class BackgroundGame {
     // ve backround va cac canh
     public void draw(SpriteBatch sb,Pandle pandle_pink,Pandle pandle_green,Puck puck  ){
         bg.draw(sb);
+
         Edge edge = new Edge();
         for(String key : mapEdge.keySet()){
                 edge = mapEdge.get(key);
@@ -66,9 +96,16 @@ public class BackgroundGame {
                 edge.setBody(edge.getBody_dark());
 
             }
+            edge.body.setFlip(false,true);
             edge.draw(sb);
 
         }
+        goc0.draw(sb);
+        goc1.draw(sb);
+        goc2.draw(sb);
+        goc3.draw(sb);
+        noi_r.draw(sb);
+        noi_l.draw(sb);
     }
 
 

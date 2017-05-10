@@ -64,7 +64,7 @@ public class PlayStateNetWork extends State implements GameListener {
         createBackground();
         //scrore
         mapSpriteScore = new HashMap<Integer, Sprite>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 6; i++) {
             Sprite sprite = new Sprite(new Texture(Hockey.PATCH + i + ".png"));
             sprite.setSize(sprite.getWidth(), sprite.getHeight());
             mapSpriteScore.put(i, sprite);
@@ -258,21 +258,22 @@ public class PlayStateNetWork extends State implements GameListener {
         background.put(Config.EDGE_RIGHT_BOTTOM, new Texture(Hockey.PATCH + "bg_right.png"));
         background.put(Config.EDGE_RIGHT_BOTTOM_LIGHT, new Texture(Hockey.PATCH + "bg_right_l.png"));
 
-        background.put(Config.EDGE_LEFT_TOP, new Texture(Hockey.PATCH + "bg_right.png"));
-        background.put(Config.EDGE_LEFT_TOP_LIGHT, new Texture(Hockey.PATCH + "bg_right_l.png"));
+        background.put(Config.EDGE_LEFT_TOP, new Texture(Hockey.PATCH + "bg_left.png"));
+        background.put(Config.EDGE_LEFT_TOP_LIGHT, new Texture(Hockey.PATCH + "bg_left_l.png"));
 
-        background.put(Config.EDGE_LEFT_BOTTOM, new Texture(Hockey.PATCH + "bg_right.png"));
-        background.put(Config.EDGE_LEFT_BOTTOM_LIGHT, new Texture(Hockey.PATCH + "bg_right_l.png"));
+        background.put(Config.EDGE_LEFT_BOTTOM, new Texture(Hockey.PATCH + "bg_left.png"));
+        background.put(Config.EDGE_LEFT_BOTTOM_LIGHT, new Texture(Hockey.PATCH + "bg_left_l.png"));
+
 
         background.put(Config.EDGE_TOP_RIGHT, new Texture(Hockey.PATCH + "bg_top.png"));
-        background.put(Config.EDGE_TOP_RIGHT_LIGHT, new Texture(Hockey.PATCH + "bg_top_light.png"));
+        background.put(Config.EDGE_TOP_RIGHT_LIGHT, new Texture(Hockey.PATCH + "bg_top_l.png"));
         background.put(Config.EDGE_TOP_LEFT, new Texture(Hockey.PATCH + "bg_top.png"));
-        background.put(Config.EDGE_TOP_LEFT_LIGHT, new Texture(Hockey.PATCH + "bg_top_light.png"));
+        background.put(Config.EDGE_TOP_LEFT_LIGHT, new Texture(Hockey.PATCH + "bg_top_l.png"));
 
-        background.put(Config.EDGE_BOTTOM_RIGHT, new Texture(Hockey.PATCH + "bg_top.png"));
-        background.put(Config.EDGE_BOTTOM_RIGHT_LIGHT, new Texture(Hockey.PATCH + "bg_top_light.png"));
-        background.put(Config.EDGE_BOTTOM_LEFT, new Texture(Hockey.PATCH + "bg_top.png"));
-        background.put(Config.EDGE_BOTTOM_LEFT_LIGHT, new Texture(Hockey.PATCH + "bg_top_light.png"));
+        background.put(Config.EDGE_BOTTOM_RIGHT, new Texture(Hockey.PATCH + "bg_bottom.png"));
+        background.put(Config.EDGE_BOTTOM_RIGHT_LIGHT, new Texture(Hockey.PATCH + "bg_bottom_l.png"));
+        background.put(Config.EDGE_BOTTOM_LEFT, new Texture(Hockey.PATCH + "bg_bottom.png"));
+        background.put(Config.EDGE_BOTTOM_LEFT_LIGHT, new Texture(Hockey.PATCH + "bg_bottom_l.png"));
 
         this.background = new BackgroundGame(Hockey.WITDH, Hockey.HEIGHT, background);
         this.WIDTH_EDGE = background.get(Config.EDGE_RIGHT_TOP).getWidth();
@@ -328,11 +329,11 @@ public class PlayStateNetWork extends State implements GameListener {
         Sprite sprite;
 
         sprite = mapSpriteScore.get(pandle_green.getScore());
-        sprite.setPosition(Hockey.WITDH - 100, Hockey.HEIGHT / 2 - 100);
+        sprite.setPosition(Hockey.WITDH - 100*(Hockey.WITDH/Config.SCREEN_MAIN.x), Hockey.HEIGHT / 2 - (100*(Hockey.HEIGHT/Config.SCREEN_MAIN.y)));
         sprite.draw(sb);
 
         sprite = mapSpriteScore.get(pandle_pink.getScore());
-        sprite.setPosition(Hockey.WITDH - 100, Hockey.HEIGHT / 2 + (100 - sprite.getHeight()));
+        sprite.setPosition(Hockey.WITDH - 100 *(Hockey.WITDH/Config.SCREEN_MAIN.x), Hockey.HEIGHT / 2 + (100*(Hockey.HEIGHT/Config.SCREEN_MAIN.y) - sprite.getHeight()));
         sprite.draw(sb);
     }
 

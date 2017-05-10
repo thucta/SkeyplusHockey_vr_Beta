@@ -16,7 +16,7 @@ import com.skyplus.hockey.objects.HockeyPreferences;
 
 public class SettingState extends State implements Screen {
     private Texture bg;
-    private Sprite check, uncheck, button_ST, textSound;
+    private Sprite check, uncheck, button_ST;
     private HockeyPreferences pref = new HockeyPreferences();
 
     public SettingState(GameStateManager gsm) {
@@ -27,8 +27,7 @@ public class SettingState extends State implements Screen {
         uncheck = new Sprite(new Texture(Hockey.PATCH+"uncheck.png"));
         check.setPosition(Hockey.WITDH*4/5, Hockey.HEIGHT/3-check.getHeight()/2);
         uncheck.setPosition(Hockey.WITDH*4/5, Hockey.HEIGHT/3-uncheck.getHeight()/2);
-        textSound = new Sprite(new Texture(Hockey.PATCH+"soundText.png"));
-        textSound.setPosition(Hockey.WITDH/5, Hockey.HEIGHT/3-textSound.getHeight()/2);
+
         button_ST = new Sprite(new Texture(Hockey.PATCH+"buttonExit.png"));
         button_ST.rotate(360);
         button_ST.setPosition(Hockey.WITDH/2-button_ST.getWidth()/2, Hockey.HEIGHT*2/3-button_ST.getHeight()/2);
@@ -109,8 +108,7 @@ public class SettingState extends State implements Screen {
         sb.draw(bg,0,0, Hockey.WITDH, Hockey.HEIGHT);
         button_ST.setFlip(false,true);
         button_ST.draw(sb);
-        textSound.setFlip(false,true);
-        textSound.draw(sb);
+
         if(pref.getMusic()){
             check.setFlip(false,true);
             check.draw(sb);

@@ -57,7 +57,7 @@ public class Puck extends GameObject {
 
         RATE_WIDTH = (Hockey.WITDH/ Config.SCREEN_MAIN.x);
         RATE_HEIGHT = (Hockey.HEIGHT/ Config.SCREEN_MAIN.y);
-        RATE_WIDTH = RATE_HEIGHT = 1;
+//        RATE_WIDTH = RATE_HEIGHT = 1;
        audio = new Audio();
 
         Effect fx  = new Effect("fxgreenEdge");

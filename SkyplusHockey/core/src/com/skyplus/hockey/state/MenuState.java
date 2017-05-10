@@ -27,15 +27,15 @@ private  Audio audio;
     public MenuState(GameStateManager gsm) {
         super(gsm);
         Gdx.app.log("here","MenuState");
-        bg = new Texture(Hockey.PATCH+"backGame.png");
+        bg = new Texture(Hockey.PATCH+"backgroundMenu.png");
         button_PC = new Sprite(new Texture(Hockey.PATCH+"buttonPC.png"));
         button_PP = new Sprite(new Texture(Hockey.PATCH+"buttonPP.png"));
         button_ST = new Sprite(new Texture(Hockey.PATCH+"buttonST.png"));
-        button_Exit = new Sprite(new Texture(Hockey.PATCH+"buttonExit.png"));
+        button_Exit = new Sprite(new Texture(Hockey.PATCH+"buttonExit1.png"));
         button_About = new Sprite(new Texture(Hockey.PATCH+"buttonAbout.png"));
-        float width = Hockey.WITDH/2-button_Exit.getWidth()/2;
+        float width = Hockey.WITDH/2-button_PP.getWidth()/2;
 
-        button_PC.setPosition(width, Hockey.HEIGHT/6-button_PC.getHeight()/2);
+        button_PC.setPosition(width, Hockey.HEIGHT/5-button_PC.getHeight()/2);
         button_PP.setPosition(width, Hockey.HEIGHT/3-button_PP.getHeight()/2 );
         button_ST.setPosition(width, Hockey.HEIGHT/2-button_ST.getHeight()/2);
         button_About.setPosition(width, Hockey.HEIGHT*2/3-button_ST.getHeight()/2);
@@ -85,8 +85,9 @@ audio = new Audio();
                 }
                 else if(button_Exit.getBoundingRectangle().contains(screenX,screenY)){
                     audio.getClick().play();
-                    gsm.set(new MenuState(gsm));
-                    dispose();
+//                    gsm.set(new MenuState(gsm));
+                    System.exit(0);
+//                    dispose();
                 }
                 return false;
             }

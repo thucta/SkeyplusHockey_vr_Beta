@@ -77,22 +77,22 @@ public class PlayState extends State implements Screen {
         background.put(Config.EDGE_RIGHT_BOTTOM, new Texture(Hockey.PATCH + "bg_right.png"));
         background.put(Config.EDGE_RIGHT_BOTTOM_LIGHT, new Texture(Hockey.PATCH + "bg_right_l.png"));
 
-        background.put(Config.EDGE_LEFT_TOP, new Texture(Hockey.PATCH + "bg_right.png"));
-        background.put(Config.EDGE_LEFT_TOP_LIGHT, new Texture(Hockey.PATCH + "bg_right_l.png"));
+        background.put(Config.EDGE_LEFT_TOP, new Texture(Hockey.PATCH + "bg_left.png"));
+        background.put(Config.EDGE_LEFT_TOP_LIGHT, new Texture(Hockey.PATCH + "bg_left_l.png"));
 
-        background.put(Config.EDGE_LEFT_BOTTOM, new Texture(Hockey.PATCH + "bg_right.png"));
-        background.put(Config.EDGE_LEFT_BOTTOM_LIGHT, new Texture(Hockey.PATCH + "bg_right_l.png"));
+        background.put(Config.EDGE_LEFT_BOTTOM, new Texture(Hockey.PATCH + "bg_left.png"));
+        background.put(Config.EDGE_LEFT_BOTTOM_LIGHT, new Texture(Hockey.PATCH + "bg_left_l.png"));
 
 
         background.put(Config.EDGE_TOP_RIGHT, new Texture(Hockey.PATCH + "bg_top.png"));
-        background.put(Config.EDGE_TOP_RIGHT_LIGHT, new Texture(Hockey.PATCH + "bg_top_light.png"));
+        background.put(Config.EDGE_TOP_RIGHT_LIGHT, new Texture(Hockey.PATCH + "bg_top_l.png"));
         background.put(Config.EDGE_TOP_LEFT, new Texture(Hockey.PATCH + "bg_top.png"));
-        background.put(Config.EDGE_TOP_LEFT_LIGHT, new Texture(Hockey.PATCH + "bg_top_light.png"));
+        background.put(Config.EDGE_TOP_LEFT_LIGHT, new Texture(Hockey.PATCH + "bg_top_l.png"));
 
-        background.put(Config.EDGE_BOTTOM_RIGHT, new Texture(Hockey.PATCH + "bg_top.png"));
-        background.put(Config.EDGE_BOTTOM_RIGHT_LIGHT, new Texture(Hockey.PATCH + "bg_top_light.png"));
-        background.put(Config.EDGE_BOTTOM_LEFT, new Texture(Hockey.PATCH + "bg_top.png"));
-        background.put(Config.EDGE_BOTTOM_LEFT_LIGHT, new Texture(Hockey.PATCH + "bg_top_light.png"));
+        background.put(Config.EDGE_BOTTOM_RIGHT, new Texture(Hockey.PATCH + "bg_bottom.png"));
+        background.put(Config.EDGE_BOTTOM_RIGHT_LIGHT, new Texture(Hockey.PATCH + "bg_bottom_l.png"));
+        background.put(Config.EDGE_BOTTOM_LEFT, new Texture(Hockey.PATCH + "bg_bottom.png"));
+        background.put(Config.EDGE_BOTTOM_LEFT_LIGHT, new Texture(Hockey.PATCH + "bg_bottom_l.png"));
 
         this.background = new BackgroundGame(Hockey.WITDH, Hockey.HEIGHT, background);
         //pause
@@ -100,17 +100,16 @@ public class PlayState extends State implements Screen {
         button_Resume = new Sprite(new Texture(Hockey.PATCH + "buttonResume.png"));
         button_NewGame = new Sprite(new Texture(Hockey.PATCH + "buttonNewGame.png"));
         button_Exit = new Sprite(new Texture(Hockey.PATCH + "buttonExit.png"));
-        button_Pause.setPosition(Hockey.WITDH - button_Pause.getWidth(), Hockey.HEIGHT / 2 - button_Pause.getHeight() / 2);
+        button_Pause.setPosition(Hockey.WITDH - button_Pause.getWidth()-this.background.getMapEdge().get(Config.EDGE_LEFT_BOTTOM).getWitdh()- 5*(Hockey.WITDH/Config.SCREEN_MAIN.x) , Hockey.HEIGHT / 2 - button_Pause.getHeight() / 2);
         button_Resume.setPosition(Hockey.WITDH / 2 - button_Resume.getWidth() / 2, Hockey.HEIGHT / 4 - button_Resume.getHeight() / 3);
         button_NewGame.setPosition(Hockey.WITDH / 2 - button_NewGame.getWidth() / 2, Hockey.HEIGHT / 2 - button_NewGame.getHeight() / 2);
         button_Exit.setPosition(Hockey.WITDH / 2 - button_Exit.getWidth() / 2, Hockey.HEIGHT * 3 / 4 - button_Exit.getHeight() / 2);
         sprite = new Sprite(background.get(Config.BACKGROUND));
-
+        sprite.setFlip(false,true);
         //scrore
         mapSpriteScore = new HashMap<Integer, Sprite>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 6; i++) {
             Sprite sprite = new Sprite(new Texture(Hockey.PATCH + i + ".png"));
-            sprite.setSize(sprite.getWidth(), sprite.getHeight());
             mapSpriteScore.put(i, sprite);
         }
 
@@ -129,6 +128,7 @@ public class PlayState extends State implements Screen {
         effectGoal = fxGoal.create();
         effectGoal.setFlip(false,true);
 
+        Hockey.scaleParticleEffect(2.4f,effectGood);
 
         //audio
         audio = new Audio();
@@ -253,12 +253,11 @@ public class PlayState extends State implements Screen {
             drawScores(sb);
 
         } else {
-            Gdx.gl.glClearColor(0, 0, 0, 0f);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
             sb.setProjectionMatrix(cam.combined);
             sb.begin();
 
-            sprite.setAlpha(0.6f);
+            sprite.setAlpha(0.9f);
 
             puck.drawEffect(sb);
             effectGood.draw(sb);
@@ -317,15 +316,15 @@ public class PlayState extends State implements Screen {
                     Hockey.WITDH - pandle_green.getWitdh() / 2 - (background.getMapEdge().get(Config.EDGE_LEFT_TOP).getWitdh() - 1));
             screenY = (int) Math.min(Math.max(screenY, pandle_green.getHeight() / 2 + background.getMapEdge().get(Config.EDGE_TOP_RIGHT).getHeight() - 1),
                     Hockey.HEIGHT / 2 - pandle_green.getHeight() / 2);
-            double distance = Math.sqrt(Vector2.dst2(puck.getX(), puck.getY(), screenX,screenY))+2;
-
-            if (distance < (puck.getBounds().radius + pandle_green.getBounds().radius) ) {
-                Double x = (screenX - puck.getX()) * (pandle_green.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getX();
-                Double y = (screenY - puck.getY()) * (pandle_green.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getY();
-
-               screenX = x.floatValue();
-               screenY = y.floatValue();
-            }
+//            double distance = Math.sqrt(Vector2.dst2(puck.getX(), puck.getY(), screenX,screenY))+2;
+//
+//            if (distance < (puck.getBounds().radius + pandle_green.getBounds().radius) ) {
+//                Double x = (screenX - puck.getX()) * (pandle_green.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getX();
+//                Double y = (screenY - puck.getY()) * (pandle_green.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getY();
+//
+//               screenX = x.floatValue();
+//               screenY = y.floatValue();
+//            }
 
            pandle_green.move(screenX, screenY);
         } else {
@@ -334,13 +333,13 @@ public class PlayState extends State implements Screen {
                     Hockey.WITDH - pandle_pink.getWitdh() / 2 - (background.getMapEdge().get(Config.EDGE_LEFT_BOTTOM).getWitdh() - 1));
             screenY = (int) Math.min(Math.max(screenY, Hockey.HEIGHT / 2 + pandle_pink.getHeight() / 2),
                     Hockey.HEIGHT - pandle_pink.getHeight() / 2 - (background.getMapEdge().get(Config.EDGE_BOTTOM_RIGHT).getHeight() - 1));
-            double distance = Math.sqrt(Vector2.dst2(puck.getX(), puck.getY(), screenX,screenY))+2;
-            if (distance < (puck.getBounds().radius + pandle_green.getBounds().radius) ) {
-
-               Double x = (screenX - puck.getX()) * (pandle_pink.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getX();
-                Double y = (screenY - puck.getY()) * (pandle_pink.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getY();screenX = x.floatValue();
-               screenY = y.floatValue();
-            }
+//            double distance = Math.sqrt(Vector2.dst2(puck.getX(), puck.getY(), screenX,screenY))+2;
+//            if (distance < (puck.getBounds().radius + pandle_green.getBounds().radius) ) {
+//
+//               Double x = (screenX - puck.getX()) * (pandle_pink.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getX();
+//                Double y = (screenY - puck.getY()) * (pandle_pink.getWitdh() / 2 + puck.getWitdh() / 2) / distance + puck.getY();screenX = x.floatValue();
+//               screenY = y.floatValue();
+//            }
             pandle_pink.move(screenX, screenY);
 
         }
@@ -396,11 +395,11 @@ public class PlayState extends State implements Screen {
         Sprite sprite;
 
         sprite = mapSpriteScore.get(pandle_green.getScore());
-        sprite.setPosition(Hockey.WITDH - 100, Hockey.HEIGHT / 2 - 100);
+        sprite.setPosition(Hockey.WITDH - 100*(Hockey.WITDH/Config.SCREEN_MAIN.x), Hockey.HEIGHT / 2 - (100*(Hockey.HEIGHT/Config.SCREEN_MAIN.y)));
         sprite.draw(sb);
 
         sprite = mapSpriteScore.get(pandle_pink.getScore());
-        sprite.setPosition(Hockey.WITDH - 100, Hockey.HEIGHT / 2 + (100 - sprite.getHeight()));
+        sprite.setPosition(Hockey.WITDH - 100 *(Hockey.WITDH/Config.SCREEN_MAIN.x), Hockey.HEIGHT / 2 + (100*(Hockey.HEIGHT/Config.SCREEN_MAIN.y) - sprite.getHeight()));
         sprite.draw(sb);
     }
 

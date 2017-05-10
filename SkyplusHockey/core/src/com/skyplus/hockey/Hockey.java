@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.skyplus.hockey.objects.DeviceAPI;
 import com.skyplus.hockey.objects.HockeyPreferences;
@@ -95,5 +96,20 @@ public class Hockey extends Game {
 	@Override
 	public void resume() {
 		gms.resume();
+	}
+
+	public static void scaleParticleEffect(float pScale, ParticleEffect effect){
+
+		float scaling = effect.getEmitters().get(0).getScale().getHighMax();
+		effect.getEmitters().get(0).getScale().setHigh(scaling * pScale);
+
+		scaling = effect.getEmitters().get(0).getScale().getLowMax();
+		effect.getEmitters().get(0).getScale().setLow(scaling * pScale);
+
+		scaling = effect.getEmitters().get(0).getVelocity().getHighMax();
+		effect.getEmitters().get(0).getVelocity().setHigh(scaling * pScale);
+
+		scaling = effect.getEmitters().get(0).getVelocity().getLowMax();
+		effect.getEmitters().get(0).getVelocity().setLow(scaling * pScale);
 	}
 }

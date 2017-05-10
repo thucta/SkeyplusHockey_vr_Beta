@@ -30,7 +30,7 @@ private Audio audio;
 
     public ModeState(GameStateManager gsm) {
         super(gsm);
-        bg = new Texture(Hockey.PATCH+"backGame.png");
+        bg = new Texture(Hockey.PATCH+"backgroundMenu.png");
         button_Mode1 = new Sprite(new Texture(Hockey.PATCH+"mode1.png"));
         button_Mode2 = new Sprite(new Texture(Hockey.PATCH+"mode2.png"));
         button_Mode3 = new Sprite(new Texture(Hockey.PATCH+"mode3.png"));

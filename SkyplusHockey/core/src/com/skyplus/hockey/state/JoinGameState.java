@@ -36,7 +36,7 @@ public class JoinGameState extends State implements Screen, GameListener {
 
     public JoinGameState(GameStateManager gsm) {
         super(gsm);
-        bg = new Texture(Hockey.PATCH + "backGame.png");
+        bg = new Texture(Hockey.PATCH + "backgroundMenu.png");
         button_CreateGame = new Sprite(new Texture(Hockey.PATCH + "buttonCreate.png"));
         button_JoinGame = new Sprite(new Texture(Hockey.PATCH + "buttonJoin.png"));
         button_Exit = new Sprite(new Texture(Hockey.PATCH + "buttonExit.png"));

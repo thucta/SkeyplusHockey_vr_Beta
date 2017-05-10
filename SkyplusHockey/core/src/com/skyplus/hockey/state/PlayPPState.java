@@ -24,7 +24,7 @@ public class PlayPPState extends State implements Screen{
     public PlayPPState(GameStateManager gsm) {
         super(gsm);
         Gdx.app.log("here","MenuState");
-        bg = new Texture(Hockey.PATCH+"backGame.png");
+        bg = new Texture(Hockey.PATCH+"backgroundMenu.png");
         button_Local = new Sprite(new Texture(Hockey.PATCH+"buttonLocal.png"));
         button_Bluetooth = new Sprite(new Texture(Hockey.PATCH+"buttonInter.png"));
         button_Exit = new Sprite(new Texture(Hockey.PATCH+"buttonExit.png"));
