@@ -33,9 +33,9 @@ public class AIPandle extends Pandle {
     /*
      Các biến di chuyển
    */
-    public static double SPEED_WIDTH = 60f;
-    public static double SPEED_HEIGHT = 80f;
-    public static float elapsed = 0.15f;
+    public static double SPEED_WIDTH = 20f;
+    public static double SPEED_HEIGHT = 30f;
+    public static float elapsed = 0.1f;
     public static float elapsedhome = 0.5f;
     private Boolean moving = false;
     private Vector2 end = new Vector2(0, 0);
@@ -66,6 +66,7 @@ public class AIPandle extends Pandle {
         velocity = new Vector2d(0, 0);
         SPEED_WIDTH *= (Hockey.WITDH/ Config.SCREEN_MAIN.x);
         SPEED_HEIGHT *= (Hockey.HEIGHT/Config.SCREEN_MAIN.y);
+        AIPandle.elapsed *=(Hockey.HEIGHT/ Config.SCREEN_MAIN.x);
         this.background =background;
 
 //        speed *= 2.4;
